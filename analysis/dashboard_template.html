@@ -1,0 +1,1641 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attendance &amp; Access Register — RFID prototype</title>
+<style>
+  /* ---------------------------------------------------------------
+     Paper / ink palette. Two themes, both flat: no gradients, no
+     glass, no glow. Hairlines and typography do the work.
+     --------------------------------------------------------------- */
+  :root {
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+    --bg: #efeadf;
+    --sheet: #fbf8f2;
+    --sunken: #f2ede2;
+    --ink: #191712;
+    --ink-2: #454137;
+    --muted: #7c7666;
+    --line: #ded6c5;
+    --line-2: #c4baa4;
+    --accent: #b83a1b;
+    --accent-soft: #f0d9cf;
+    --ok: #27614a;
+    --ok-soft: #d9e7dd;
+    --warn: #9a6408;
+    --warn-soft: #f1e5cc;
+    --shadow: 0 1px 0 rgba(25,23,18,.04);
+  }
+  html[data-theme="night"] {
+    --bg: #100f0c;
+    --sheet: #191813;
+    --sunken: #14130f;
+    --ink: #ece5d5;
+    --ink-2: #b9b2a0;
+    --muted: #8a8371;
+    --line: #2b2921;
+    --line-2: #3c3930;
+    --accent: #e4693f;
+    --accent-soft: #3a2018;
+    --ok: #74c39a;
+    --ok-soft: #16302a;
+    --warn: #d9a441;
+    --warn-soft: #33280f;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  button, input, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .sheet { max-width: 1180px; margin: 0 auto; padding: 34px 28px 64px; }
+
+  /* ---------------- masthead ---------------- */
+  .masthead {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 28px; flex-wrap: wrap;
+  }
+  .kicker {
+    margin: 0 0 6px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .kicker b { color: var(--accent); font-weight: 600; }
+  h1 { margin: 0; font: 400 31px/1.1 var(--serif); letter-spacing: -.01em; }
+  .stamp-line {
+    margin: 8px 0 0; font: 11.5px/1.5 var(--mono); color: var(--muted);
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+  .stamp-line .d { color: var(--line-2); }
+
+  .mast-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+  .btn {
+    appearance: none; background: var(--sheet); border: 1px solid var(--line-2);
+    border-radius: 2px; padding: 7px 11px; cursor: pointer;
+    font-size: 12px; letter-spacing: .01em; color: var(--ink-2);
+    display: inline-flex; align-items: center; gap: 7px; box-shadow: var(--shadow);
+    transition: border-color .12s ease, color .12s ease, background .12s ease;
+  }
+  .btn:hover { border-color: var(--ink-2); color: var(--ink); }
+  .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--sheet); }
+  .btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+  html[data-theme="night"] .btn.primary { color: #14130f; }
+  .btn.ghost { background: transparent; border-color: transparent; color: var(--muted); box-shadow: none; }
+  .btn.ghost:hover { color: var(--ink); }
+  .btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+  .seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 2px; overflow: hidden; background: var(--sheet); }
+  .seg button {
+    appearance: none; border: 0; background: transparent; padding: 7px 10px;
+    font-size: 11.5px; color: var(--muted); cursor: pointer;
+  }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+  html[data-theme="night"] .seg button[aria-pressed="true"] { color: #14130f; }
+
+  .led {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ok);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  .led.paused { background: var(--muted); box-shadow: none; animation: none; }
+  .led.error { background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent); animation: none; }
+  .led.sample { background: var(--accent); box-shadow: none; animation: none; }
+  @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .35 } }
+
+  .ticker { margin: 0; font: 11px/1.4 var(--mono); color: var(--muted); text-align: right; }
+
+  .rule { height: 1px; background: var(--line-2); margin: 22px 0 0; }
+
+  /* ---------------- gauges ---------------- */
+  .gauges {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--line-2); background: var(--sheet);
+    margin: 26px 0 0; border-radius: 2px; overflow: hidden;
+  }
+  .gauge { padding: 15px 16px 14px; border-left: 1px solid var(--line); position: relative; }
+  .gauge:first-child { border-left: 0; }
+  .gauge .g-k {
+    font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .gauge .g-n {
+    font: 500 29px/1.05 var(--mono); font-variant-numeric: tabular-nums;
+    margin: 7px 0 4px; letter-spacing: -.03em;
+  }
+  .gauge .g-c { font-size: 11px; color: var(--muted); }
+  .gauge[data-alert="1"] .g-n { color: var(--accent); }
+  .gauge[data-alert="1"]::after {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent);
+  }
+
+  /* ---------------- layout ---------------- */
+  .grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 22px; margin-top: 22px; align-items: start; }
+
+  .panel {
+    border: 1px solid var(--line-2); background: var(--sheet); border-radius: 2px;
+    margin-top: 22px;
+  }
+  .grid .panel { margin-top: 0; }
+  .panel-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+    padding: 13px 16px 11px; border-bottom: 1px solid var(--line);
+  }
+  .panel-head h2 {
+    margin: 0; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    font-weight: 600; color: var(--ink-2);
+  }
+  .panel-head .count { font: 11px var(--mono); color: var(--muted); white-space: nowrap; }
+  .panel-body { padding: 14px 16px 16px; }
+  .panel-body.tight { padding: 0; }
+  .hint { margin: 0 0 12px; font-size: 12.5px; color: var(--muted); max-width: 62ch; }
+
+  /* ---------------- toolbars / chips ---------------- */
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .field {
+    display: flex; align-items: center; gap: 7px; border: 1px solid var(--line-2);
+    background: var(--sunken); border-radius: 2px; padding: 5px 9px; min-width: 0; flex: 1 1 160px;
+  }
+  .field input { border: 0; background: transparent; outline: none; width: 100%; font-size: 12.5px; }
+  .field span { color: var(--muted); font-size: 12px; }
+  .chips { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+  .chip-btn {
+    appearance: none; background: transparent; border: 1px solid var(--line-2); border-radius: 2px;
+    padding: 4px 8px; font-size: 11px; color: var(--muted); cursor: pointer; letter-spacing: .02em;
+  }
+  .chip-btn:hover { color: var(--ink); border-color: var(--ink-2); }
+  .chip-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--sheet); }
+  html[data-theme="night"] .chip-btn[aria-pressed="true"] { color: #14130f; }
+
+  /* ---------------- tables ---------------- */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; padding: 0 0 8px; border-bottom: 1px solid var(--line);
+  }
+  thead th.num { text-align: right; }
+  tbody td { padding: 11px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  thead th + th { padding-left: 16px; }
+  tbody td + td { padding-left: 16px; }
+  /* the flags number must never touch the status pill next to it */
+  .flags-cell { text-align: right; padding-right: 20px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .status-cell { white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr.clickable { cursor: pointer; }
+  tbody tr.clickable:hover td { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+
+  .who .name { font-size: 13.5px; font-weight: 500; }
+  .who .roll { font: 11px var(--mono); color: var(--muted); margin-top: 1px; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .pct { font: 500 14px var(--mono); font-variant-numeric: tabular-nums; }
+  .note { font-size: 11.5px; color: var(--muted); }
+
+  .bar { height: 4px; background: var(--sunken); border: 1px solid var(--line); border-radius: 1px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--ok); }
+  .bar i.low { background: var(--accent); }
+  .att-line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 5px; }
+
+  .pips { display: flex; gap: 3px; margin-top: 7px; flex-wrap: wrap; }
+  .pip {
+    width: 13px; height: 13px; border: 1px solid var(--line-2); border-radius: 1px; display: inline-block;
+  }
+  .pip.on { background: var(--ok); border-color: var(--ok); }
+
+  .pill {
+    display: inline-block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 6px; border: 1px solid currentColor; border-radius: 1px; white-space: nowrap;
+  }
+  .pill.ok { color: var(--ok); background: var(--ok-soft); }
+  .pill.low { color: var(--accent); background: var(--accent-soft); }
+  .pill.plain { color: var(--muted); background: transparent; border-color: var(--line-2); }
+
+  .flags-n { font: 500 13px var(--mono); }
+  .flags-n.zero { color: var(--muted); }
+
+  .empty { margin: 0; padding: 26px 4px; text-align: center; color: var(--muted); font-size: 12.5px; }
+
+  /* ---------------- incidents ---------------- */
+  .inc { border-bottom: 1px solid var(--line); padding: 14px 16px; }
+  .inc:last-child { border-bottom: 0; }
+  .inc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .inc .score { font: 500 21px/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+  .inc .score .meta { font: 10px var(--mono); color: var(--muted); letter-spacing: 0; }
+  .inc .where { font: 11px var(--mono); color: var(--muted); }
+  .badge {
+    font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 6px;
+    border: 1px solid currentColor; border-radius: 1px;
+  }
+  .badge.HIGH { color: var(--accent); background: var(--accent-soft); }
+  .badge.REVIEW { color: var(--warn); background: var(--warn-soft); }
+  .badge.WATCH { color: var(--muted); background: transparent; border-color: var(--line-2); }
+  .badge.CLEAR { color: var(--ok); background: var(--ok-soft); }
+
+  .cards-line { display: flex; gap: 4px; flex-wrap: wrap; margin: 10px 0 0; align-items: center; }
+  .kbd-chip {
+    font: 10.5px var(--mono); padding: 2px 6px; border: 1px solid var(--line-2);
+    border-radius: 1px; color: var(--ink-2); background: var(--sunken);
+  }
+  ul.why { margin: 10px 0 0; padding: 0 0 0 16px; color: var(--ink-2); font-size: 12.5px; }
+  ul.why li { margin: 3px 0; }
+  ul.why li::marker { color: var(--line-2); }
+
+  details.calc { margin-top: 11px; }
+  details.calc > summary {
+    cursor: pointer; list-style: none; font-size: 11.5px; color: var(--muted);
+    display: inline-flex; align-items: center; gap: 6px; border-bottom: 1px dotted var(--line-2);
+  }
+  details.calc > summary::-webkit-details-marker { display: none; }
+  details.calc > summary::before { content: "+"; font-family: var(--mono); color: var(--accent); }
+  details.calc[open] > summary::before { content: "–"; }
+  details.calc > summary:hover { color: var(--ink); }
+  .calc-table { margin-top: 10px; font-size: 12px; }
+  .calc-table td { padding: 5px 0; border-bottom: 1px solid var(--line); }
+  .calc-table tr:last-child td { border-bottom: 0; }
+  .calc-table tr.sum td { color: var(--muted); }
+  .calc-table tr.tot td { font-weight: 600; border-top: 1px solid var(--line-2); }
+  .mathline {
+    margin-top: 10px; font: 10.5px/1.7 var(--mono); color: var(--muted);
+    word-break: break-word; background: var(--sunken); border: 1px solid var(--line);
+    padding: 8px 10px; border-radius: 2px;
+  }
+
+  /* ---------------- timeline ---------------- */
+  .tl-row {
+    display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .tl-row:last-of-type { border-bottom: 0; }
+  .tl-name .n { font: 12px var(--mono); color: var(--ink-2); }
+  .tl-name .d { font: 10.5px/1.5 var(--mono); color: var(--muted); margin-top: 2px; }
+  .tl-time { color: var(--ink-2); }
+
+  .strip { position: relative; height: 34px; border-bottom: 1px solid var(--line-2); }
+  .strip::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 10%);
+    pointer-events: none;
+  }
+  .tick {
+    position: absolute; bottom: 0; width: 2px; height: 13px; margin-left: -1px;
+    background: var(--line-2); cursor: crosshair;
+  }
+  .tick.grant { background: var(--ink-2); height: 15px; }
+  .tick.denied { background: var(--accent); height: 15px; }
+  .tick.flag { background: var(--accent); height: 24px; width: 3px; }
+  .tick:hover { background: var(--accent); height: 30px; }
+  .ruler { position: relative; height: 15px; }
+  .ruler span { position: absolute; top: 3px; font: 9.5px var(--mono); color: var(--muted); }
+  .ruler span:first-child { left: 0; }
+  .ruler span:last-child { right: 0; }
+
+  .tip {
+    position: fixed; z-index: 60; pointer-events: none; opacity: 0; transform: translateY(3px);
+    transition: opacity .1s ease, transform .1s ease;
+    background: var(--ink); color: var(--sheet); font: 11px/1.5 var(--mono);
+    padding: 6px 8px; border-radius: 2px; max-width: 280px; white-space: pre-line;
+  }
+  html[data-theme="night"] .tip { color: #12110d; }
+  .tip.on { opacity: 1; transform: translateY(0); }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 12px; }
+  .legend i { display: inline-block; width: 8px; height: 8px; margin-right: 5px; vertical-align: -1px; }
+  .legend i.grant { background: var(--ink-2); }
+  .legend i.denied { background: var(--accent); }
+  .legend i.flag { background: var(--accent); width: 3px; height: 12px; vertical-align: -3px; }
+
+  /* ---------------- scan log ---------------- */
+  .log-wrap { max-height: 460px; overflow: auto; }
+  .log-table td { font-size: 12.5px; }
+  .log-table .t { font: 11.5px var(--mono); color: var(--ink-2); white-space: nowrap; }
+  .log-table .r { font: 11.5px var(--mono); color: var(--muted); }
+  tr.is-new td { animation: rowIn 1.8s ease-out; }
+  @keyframes rowIn {
+    0% { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+    100% { background: transparent; }
+  }
+  .flash-note { font: 11px var(--mono); color: var(--accent); opacity: 0; transition: opacity .25s ease; }
+  .flash-note.on { opacity: 1; }
+
+  /* ---------------- footer ---------------- */
+  .colophon {
+    margin-top: 26px; border-top: 1px solid var(--line-2); padding-top: 14px;
+    display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    font-size: 11.5px; color: var(--muted);
+  }
+  .colophon p { margin: 0; max-width: 70ch; }
+
+  .wifi-note {
+    margin-top: 22px; border: 1px solid var(--line-2); border-left: 3px solid var(--accent);
+    background: var(--sheet); padding: 12px 15px; display: flex; gap: 14px; align-items: baseline;
+    justify-content: space-between; flex-wrap: wrap;
+  }
+  .wifi-note p { margin: 0; font-size: 12.5px; color: var(--ink-2); max-width: 78ch; }
+  .wifi-note b { color: var(--ink); }
+  .wifi-note code { font: 11.5px var(--mono); }
+
+  /* ---------------- drawer ---------------- */
+  .scrim {
+    position: fixed; inset: 0; background: color-mix(in srgb, #000 42%, transparent);
+    opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 40;
+  }
+  .scrim.on { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100vw);
+    background: var(--sheet); border-left: 1px solid var(--line-2); z-index: 50;
+    transform: translateX(101%); transition: transform .22s cubic-bezier(.22,.7,.3,1);
+    display: flex; flex-direction: column;
+  }
+  .drawer.on { transform: none; }
+  .drawer-head {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--line);
+  }
+  .drawer-head h3 { margin: 0; font: 400 20px/1.2 var(--serif); }
+  .drawer-head .roll { font: 11px var(--mono); color: var(--muted); margin-top: 3px; }
+  .drawer-body { padding: 16px 18px 30px; overflow: auto; }
+  .kv { display: grid; grid-template-columns: 1fr auto; gap: 7px 14px; font-size: 12.5px; margin: 0; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+  .drawer h4 {
+    margin: 22px 0 8px; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  .mini { width: 100%; font-size: 12px; }
+  .mini td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .mini td:last-child { text-align: right; }
+
+  /* ---------------- guide overlay ---------------- */
+  .overlay { position: fixed; inset: 0; z-index: 70; display: none; background: color-mix(in srgb, var(--bg) 92%, #000); }
+  .overlay.on { display: block; }
+  .overlay-scroll { height: 100%; overflow: auto; padding: 32px 20px 80px; }
+  .guide {
+    max-width: 760px; margin: 0 auto; background: var(--sheet);
+    border: 1px solid var(--line-2); border-radius: 2px; padding: 40px 44px 48px;
+  }
+  .close-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .guide h2 { margin: 10px 0 6px; font: 400 27px/1.15 var(--serif); letter-spacing: -.01em; }
+  .guide .deck { margin: 0 0 24px; color: var(--muted); font-size: 13.5px; max-width: 60ch; }
+  .guide h3 {
+    margin: 34px 0 8px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  .guide h3 span { color: var(--muted); letter-spacing: .08em; margin-right: 8px; }
+  .guide p { margin: 0 0 10px; color: var(--ink-2); font-size: 13.5px; max-width: 66ch; }
+  .guide p.lead { color: var(--ink); font-size: 14.5px; }
+  .guide ul { margin: 0 0 12px; padding-left: 18px; color: var(--ink-2); font-size: 13.5px; max-width: 66ch; }
+  .guide li { margin: 5px 0; }
+  .guide code {
+    font: 12px var(--mono); background: var(--sunken); border: 1px solid var(--line);
+    padding: 1px 5px; border-radius: 2px;
+  }
+  .flow { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; margin: 16px 0 6px; }
+  .flow .node { flex: 1 1 96px; border: 1px solid var(--line-2); background: var(--sunken); padding: 9px 10px; border-radius: 2px; }
+  .flow .node b { display: block; font-size: 11.5px; letter-spacing: .04em; }
+  .flow .node span { display: block; font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+  .flow .arw { align-self: center; color: var(--line-2); font-family: var(--mono); }
+  .flow .node.hot { border-color: var(--accent); }
+  .flow .node.hot b { color: var(--accent); }
+
+  .guide table { margin: 12px 0 4px; font-size: 12.5px; }
+  .guide tbody td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .guide tbody td:last-child { text-align: right; font-family: var(--mono); white-space: nowrap; padding-right: 0; }
+  .guide tbody td:first-child { font-family: var(--mono); font-size: 11.5px; color: var(--ink); white-space: nowrap; }
+
+  .example {
+    border: 1px solid var(--line-2); background: var(--sunken); border-radius: 2px;
+    padding: 16px 18px; margin: 14px 0 10px;
+  }
+  .example h5 {
+    margin: 0 0 8px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  .example pre { margin: 0; font: 11.5px/1.85 var(--mono); color: var(--ink-2); white-space: pre-wrap; word-break: break-word; }
+  .example .out { color: var(--accent); font-weight: 600; }
+  .guide .toc { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 6px; }
+  .guide .toc a {
+    font-size: 11px; text-decoration: none; color: var(--ink-2);
+    border: 1px solid var(--line-2); padding: 4px 8px; border-radius: 2px;
+  }
+  .guide .toc a:hover { border-color: var(--ink-2); }
+  .footnote { margin-top: 34px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
+
+  .nudge {
+    display: none; margin-top: 20px; border: 1px solid var(--line-2); background: var(--sheet);
+    padding: 11px 14px; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  }
+  .nudge.on { display: flex; }
+  .nudge p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+
+  /* sample-data mode: impossible to mistake for live attendance */
+  .demo-banner {
+    display: none; margin: 18px 0 0; padding: 11px 14px; align-items: baseline; gap: 12px;
+    flex-wrap: wrap; justify-content: space-between;
+    border: 1px solid var(--accent); background: var(--accent-soft);
+  }
+  .demo-banner.on { display: flex; }
+  .demo-banner .tag {
+    font: 600 9px var(--mono); letter-spacing: .16em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent); padding: 3px 6px;
+    border-radius: 1px; white-space: nowrap;
+  }
+  .demo-banner p { margin: 0; font-size: 12.5px; color: var(--ink); flex: 1 1 320px; max-width: 78ch; }
+  .demo-banner code { font: 11.5px var(--mono); }
+  .demo-nav { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .demo-pos {
+    font: 11.5px var(--mono); color: var(--muted); min-width: 46px;
+    text-align: center; white-space: nowrap;
+  }
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: 1fr; }
+    .gauges { grid-template-columns: repeat(3, 1fr); }
+    .gauge:nth-child(4) { border-left: 0; }
+    .gauge:nth-child(n+4) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 620px) {
+    .sheet { padding: 24px 16px 48px; }
+    h1 { font-size: 25px; }
+    .mast-right { align-items: flex-start; width: 100%; }
+    .controls { justify-content: flex-start; }
+    .ticker { text-align: left; }
+    .gauges { grid-template-columns: repeat(2, 1fr); }
+    .gauge:nth-child(3) { border-left: 0; }
+    .gauge:nth-child(even) { border-left: 1px solid var(--line); }
+    .gauge:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .tl-row { grid-template-columns: 1fr; gap: 6px; }
+    /* four columns in 388 px: tighten the gutters so the name keeps room,
+       while keeping a clear gap between the flags number and the status pill */
+    thead th + th, tbody td + td { padding-left: 8px; }
+    .flags-cell { padding-right: 10px; }
+    #students .who { min-width: 96px; }
+    .pips { gap: 2px; }
+    .pip { width: 11px; height: 11px; }
+    .guide { padding: 26px 20px 34px; }
+    .log-wrap { max-height: none; }
+    .log-table th:nth-child(4), .log-table td:nth-child(4) { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .controls, .ticker, .nudge, .toolbar, .chips, .legend, .wifi-note,
+    .drawer, .scrim, .overlay, .tip { display: none !important; }
+    .sheet { max-width: none; padding: 0; }
+    .panel, .gauges { border-color: #bbb; break-inside: avoid; }
+    .log-wrap { max-height: none; overflow: visible; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <div>
+      <p class="kicker">Attendance log · <b>RFID + servo door</b> · ESP32</p>
+      <h1>Attendance &amp; Access Register</h1>
+      <p class="stamp-line" id="stamp-line"></p>
+    </div>
+    <div class="mast-right">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Colour theme">
+          <button type="button" data-theme-btn="paper" aria-pressed="true">Paper</button>
+          <button type="button" data-theme-btn="night" aria-pressed="false">Night</button>
+        </div>
+        <button type="button" class="btn primary" id="open-guide">How this works</button>
+        <button type="button" class="btn" id="live-btn" aria-pressed="true">
+          <i class="led" id="led"></i><span id="live-label">Live</span>
+        </button>
+        <button type="button" class="btn" id="demo-btn" aria-pressed="false"
+                title="Load the synthetic test dataset (s)">Sample data</button>
+        <button type="button" class="btn ghost" id="print-btn">Print</button>
+      </div>
+      <p class="ticker" id="ticker">connecting…</p>
+    </div>
+  </header>
+
+  <div class="rule"></div>
+
+  <section class="gauges" id="gauges" aria-label="Headline numbers"></section>
+
+  <div class="demo-banner" id="demo-banner" role="status" aria-live="polite">
+    <span class="tag">Synthetic dataset</span>
+    <p id="demo-text"></p>
+    <div class="demo-nav">
+      <button type="button" class="btn" id="demo-prev" aria-label="Previous session">‹ Prev</button>
+      <span class="demo-pos" id="demo-pos">all</span>
+      <button type="button" class="btn" id="demo-next" aria-label="Next session">Next ›</button>
+      <button type="button" class="btn" id="demo-all">All sessions</button>
+      <button type="button" class="btn" id="demo-exit">Back to live</button>
+    </div>
+  </div>
+
+  <div class="nudge" id="nudge">
+    <p>First time looking at this? The whole system — including the risk score — is explained in plain English.</p>
+    <button type="button" class="btn" id="nudge-open">Read the 2-minute version</button>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Students</h2>
+        <span class="count" id="students-count"></span>
+      </div>
+      <div class="panel-body">
+        <div class="toolbar">
+          <label class="field">
+            <span>Find</span>
+            <input id="q" type="search" placeholder="name or roll number" autocomplete="off">
+          </label>
+          <div class="chips" role="group" aria-label="Sort students">
+            <button type="button" class="chip-btn" data-sort="roll" aria-pressed="true">Roll</button>
+            <button type="button" class="chip-btn" data-sort="percent" aria-pressed="false">Attendance</button>
+            <button type="button" class="chip-btn" data-sort="flags" aria-pressed="false">Flags</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th id="att-head">Attendance</th>
+              <th class="num flags-cell">Flags</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="students"></tbody>
+        </table>
+        <p class="note" style="margin:12px 0 0">Click a row for that student's day-by-day record.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Flagged runs</h2>
+        <span class="count" id="incidents-count"></span>
+      </div>
+      <div style="padding:12px 16px 0">
+        <div class="toolbar" style="margin-bottom:10px">
+          <div class="chips" role="group" aria-label="Filter incidents by band">
+            <button type="button" class="chip-btn" data-band="all" aria-pressed="true">All</button>
+            <button type="button" class="chip-btn" data-band="REVIEW" aria-pressed="false">Review+</button>
+            <button type="button" class="chip-btn" data-band="HIGH" aria-pressed="false">High only</button>
+          </div>
+        </div>
+      </div>
+      <div id="incidents"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Timeline</h2>
+      <span class="count">one mark per scan · hover for the exact time</span>
+    </div>
+    <div class="panel-body">
+      <div id="timeline"></div>
+      <div class="legend">
+        <span><i class="grant"></i>granted</span>
+        <span><i class="denied"></i>denied — card not in roster</span>
+        <span><i class="flag"></i>inside a flagged run</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Scan log</h2>
+      <span class="count" id="scanlog-count"></span>
+    </div>
+    <div class="panel-body">
+      <div class="toolbar">
+        <div class="chips" role="group" aria-label="Filter scans">
+          <button type="button" class="chip-btn" data-scan="all" aria-pressed="true">Everything</button>
+          <button type="button" class="chip-btn" data-scan="granted" aria-pressed="false">Granted</button>
+          <button type="button" class="chip-btn" data-scan="denied" aria-pressed="false">Denied</button>
+          <button type="button" class="chip-btn" data-scan="flagged" aria-pressed="false">Flagged</button>
+        </div>
+        <span class="flash-note" id="flash-note"></span>
+      </div>
+      <div class="log-wrap">
+        <table class="log-table">
+          <thead>
+            <tr><th>Time</th><th>Card</th><th>Result</th><th>Session</th></tr>
+          </thead>
+          <tbody id="scanlog"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="wifi-note">
+    <p><b>Wi-Fi is not required for the door.</b> It does two optional jobs: it sets the clock (so a scan says
+      <code>11:36:39</code> instead of <code>T+83s</code>), and it uploads each record to this laptop.
+      Unplug it and tapping, the LEDs, the servo and attendance all still work — records queue on the board
+      and upload later.</p>
+    <button type="button" class="btn" id="wifi-open">Why Wi-Fi then?</button>
+  </div>
+
+  <footer class="colophon">
+    <p id="foot"></p>
+    <p style="text-align:right">
+      <label class="btn ghost" for="file" style="cursor:pointer">
+        Load a payload JSON
+        <input type="file" id="file" accept=".json,application/json" hidden>
+      </label>
+    </p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawer-title" aria-hidden="true">
+  <div class="drawer-head">
+    <div>
+      <h3 id="drawer-title"></h3>
+      <div class="roll" id="drawer-sub"></div>
+    </div>
+    <button type="button" class="btn ghost" id="drawer-close" aria-label="Close panel">Close</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<div class="overlay" id="guide" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+  <div class="overlay-scroll">
+    <div class="guide">
+      <div class="close-row">
+        <p class="kicker" style="margin:0">Read this once · nothing else needed</p>
+        <button type="button" class="btn" id="guide-close">Close</button>
+      </div>
+
+      <h2 id="guide-title">How this actually works</h2>
+      <p class="deck">A card, a door, and a spreadsheet that grades itself. No statistics background assumed —
+        every claim below is something you can watch happen on the bench.</p>
+
+      <div class="toc">
+        <a href="#g-tap">1 · One tap</a>
+        <a href="#g-attend">2 · Attendance</a>
+        <a href="#g-proxy">3 · Queue vs stack</a>
+        <a href="#g-score">4 · The score</a>
+        <a href="#g-bands">5 · Bands</a>
+        <a href="#g-wifi">6 · What Wi-Fi does</a>
+        <a href="#g-limits">7 · What it can't do</a>
+      </div>
+
+      <h3 id="g-tap"><span>01</span>One tap, start to finish</h3>
+      <p class="lead">You hold a card near the reader. About 40 milliseconds later the decision is already made.</p>
+      <div class="flow">
+        <div class="node"><b>Card</b><span>passive 13.56 MHz tag</span></div>
+        <div class="arw">→</div>
+        <div class="node"><b>RC522</b><span>reads its UID</span></div>
+        <div class="arw">→</div>
+        <div class="node"><b>ESP32</b><span>in the roster?</span></div>
+        <div class="arw">→</div>
+        <div class="node hot"><b>Yes</b><span>green LED + servo nudge</span></div>
+        <div class="arw">/</div>
+        <div class="node hot"><b>No</b><span>red LED, door stays shut</span></div>
+      </div>
+      <p>Either way one line is written to the log, with the card's UID, the verdict, and the time. A refused
+        card is still recorded — that is how “somebody is trying random cards at the door” shows up later
+        instead of vanishing.</p>
+      <div class="example">
+        <h5>What the board prints</h5>
+        <pre>tap  UID 20 74 0B 56   in roster  →  CS-05     <span class="out">GRANTED</span>  PRESENT   11:33:19
+tap  UID 2E 63 64 F8   not found  →  —         <span class="out">DENIED</span>              11:36:39</pre>
+      </div>
+
+      <h3 id="g-attend"><span>02</span>Attendance is a fact per day, not a counter</h3>
+      <p>The first accepted tap of the day makes you <strong>present</strong>. Tap again twenty minutes later and
+        the door still opens — you are simply walking in — but the record says
+        <code>ALREADY_MARKED</code> and the attendance number does not move.</p>
+      <p>So the percentage is not “taps” and not “minutes”. It is:</p>
+      <div class="example">
+        <pre>attendance %  =  days you were present  ÷  days the system recorded
+Aisha         =  6 / 8                                     =  75%</pre>
+      </div>
+      <p>75% is the usual eligibility line, which is why anything below it is marked in red in the table.
+        Nothing is punished automatically — the percentage is just arithmetic.</p>
+
+      <h3 id="g-proxy"><span>03</span>What a real queue looks like, and what a stack looks like</h3>
+      <p>This is the one honest weakness of any card system: <strong>a UID cannot prove who is holding the
+        card</strong>. So instead of pretending, the system measures the <em>rhythm</em> of taps.</p>
+      <ul>
+        <li><strong>A real queue</strong> — one person walks up, taps, steps aside, the next arrives. Roughly
+          1.5–4 seconds apart, and a different order every morning.</li>
+        <li><strong>A stack of cards</strong> — one person holds five friends' cards and fans them across the
+          reader. Five different UIDs inside about a second, often in the same order two days running.</li>
+      </ul>
+      <p>A hand cannot produce the second pattern by accident, and a real queue cannot produce it either.
+        That gap is the entire detection idea — which is why the system never accuses anyone, it only flags a
+        <em>run of taps</em> for a human to look at.</p>
+
+      <h3 id="g-score"><span>04</span>The score is a weighted sum, nothing hidden</h3>
+      <p>Each suspicious run gets up to 100 points. Every signal below is measured on that run alone,
+        multiplied by its weight, and added up. The full table is printed under “show the calculation” on every
+        incident, so any number on this page can be checked by hand.</p>
+      <table>
+        <thead><tr><th>Signal</th><th>In plain English</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td>impossible-gap</td><td>two different cards closer than a hand can move — under 0.5 s</td><td>0.40</td></tr>
+          <tr><td>burst</td><td>many different cards inside a couple of seconds</td><td>0.20</td></tr>
+          <tr><td>crowd-anomaly</td><td>the mix of people is unusual for that student's history</td><td>0.12</td></tr>
+          <tr><td>tight-gaps</td><td>0.5–1.2 s apart: fast, but a person could do it</td><td>0.10</td></tr>
+          <tr><td>order-rigidity</td><td>the exact same sequence of cards keeps reappearing</td><td>0.10</td></tr>
+          <tr><td>new-cards</td><td>cards never seen in earlier sessions (could be new students)</td><td>0.05</td></tr>
+          <tr><td>nearby-denials</td><td>unregistered cards being tried in the same window</td><td>0.03</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px">One subtraction exists, for fairness: if two students have walked in together
+        for most of the term, their habitual pair gets a small discount so a real friendship is not flagged
+        forever.</p>
+
+      <div class="example">
+        <h5>One worked example, start to finish</h5>
+        <pre>07:30:41  CS-01 taps           gap —
+07:30:41  CS-03 taps           gap 0.24 s   two different cards, a quarter second apart
+07:30:42  CS-06 taps           gap 0.22 s
+07:30:42  CS-09 taps           gap 0.30 s
+07:30:42  CS-11 taps           gap 0.23 s   five cards, 0.95 s in total
+
+impossible-gap   1.00 × 0.40 = 0.400   all four gaps under 0.5 s
+burst            1.00 × 0.20 = 0.200   five cards inside 0.95 s
+crowd-anomaly    0.43 × 0.12 = 0.052   this group rarely appears together
+tight-gaps       0.00 × 0.10 = 0.000   none in the 0.5–1.2 s band
+order-rigidity   0.60 × 0.10 = 0.060   same chain seen 3× before
+new-cards        0.00 × 0.05 = 0.000
+nearby-denials   0.00 × 0.03 = 0.000
+                             -------
+                    raw       0.712  →  71 / 100   <span class="out">HIGH</span></pre>
+      </div>
+      <p>Read that bottom line as: <em>five different cards were tapped in under a second, in an order that has
+        repeated before, by people who are not usually together.</em> Whether that was a stack of cards or an
+        unusual rush is a judgement call left to a human.</p>
+
+      <h3 id="g-bands"><span>05</span>The four bands, and what to do about them</h3>
+      <table>
+        <thead><tr><th>Band</th><th>Score</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td>CLEAR</td><td>0–29</td><td>nothing unusual in the data</td></tr>
+          <tr><td>WATCH</td><td>30–49</td><td>fast-ish, explainable by a busy door</td></tr>
+          <tr><td>REVIEW</td><td>50–69</td><td>worth a human look at the timestamps</td></tr>
+          <tr><td>HIGH</td><td>70+</td><td>treat as proxy attendance until proven otherwise</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px">The system flags. It never marks anyone absent, never locks anyone out, and
+        never changes a record on its own.</p>
+
+      <h3 id="g-wifi"><span>06</span>So what is the Wi-Fi actually for?</h3>
+      <p>Two optional jobs, and neither one is the door:</p>
+      <ul>
+        <li><strong>The clock.</strong> A freshly booted ESP32 has no idea what year it is. NTP over Wi-Fi turns
+          <code>T+83s</code> into <code>2026-11-08 11:36:39</code>. With no network there is no real clock, and
+          the log honestly labels those times as relative instead of inventing a date.</li>
+        <li><strong>The uplink.</strong> Each record is posted to the laptop, which is what this page reads.
+          With no network the board simply keeps the records in its own flash and uploads them when a network
+          appears.</li>
+      </ul>
+      <p>Everything that matters at the door — reader, roster, LEDs, servo, attendance — runs with the network
+        switched off entirely. If the hotspot is flaky the demo still works; the timestamps are the only thing
+        that gets vaguer.</p>
+
+      <h3 id="g-limits"><span>07</span>What this cannot do</h3>
+      <ul>
+        <li>It cannot prove <em>who</em> held the card. A friend can tap your card once, slowly, and the data
+          looks perfect.</li>
+        <li>It cannot see a person, so it cannot detect someone slipping through the door behind you.</li>
+        <li>It cannot separate “five friends' cards, stacked” from “five people who happened to arrive at once”
+          with certainty — it can only say the pattern is unusual.</li>
+      </ul>
+      <p>Those limits are the interesting part of the report, not a bug in it. A camera or a second factor
+        would be the next step, and the honest description of this prototype is <em>tamper-evident
+        attendance</em>, not <em>cheat-proof attendance</em>.</p>
+
+      <p class="footnote">
+        Where the code is: <code>rfid-attendance-door.ino → handleCard()</code> decides on a tap ·
+        <code>analysis/detect.py → detect()</code> turns a session into bands and points ·
+        <code>server/server.py</code> receives records and serves this page.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script id="payload" type="application/json">__DATA_JSON__</script>
+<script>
+"use strict";
+
+/* ============================================================
+   State
+   ============================================================ */
+const $ = sel => document.querySelector(sel);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
+  c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const bandOf = score =>
+  score >= 70 ? "HIGH" : score >= 50 ? "REVIEW" : score >= 30 ? "WATCH" : "CLEAR";
+
+const VIEW = {
+  q: "", sort: "roll", band: "all", scan: "all",
+  live: true, theme: "paper",
+  demo: false, demoIndex: null, embedded: null,
+  data: null, scans: [], lastSig: "", newCount: 0, drawer: null
+};
+
+/* ============================================================
+   Derived data
+   ============================================================ */
+function scanRows(d) {
+  const rows = [];
+  (d.sessions || []).forEach((s, si) => (s.timeline || []).forEach((e, ei) => {
+    rows.push({
+      session: s.name || "session_" + (si + 1),
+      date: s.date || "",
+      ts: e.ts || "",
+      roll: e.roll || "",
+      result: e.result || "",
+      src: e.src || "",
+      flag: !!e.flag,
+      seq: si * 100000 + ei
+    });
+  }));
+  return rows.sort((a, b) => {
+    const ta = /^\d{4}-/.test(a.ts) ? a.ts : "";
+    const tb = /^\d{4}-/.test(b.ts) ? b.ts : "";
+    if (ta && tb && ta !== tb) return ta < tb ? 1 : -1;
+    return b.seq - a.seq;
+  });
+}
+
+function presenceByStudent(d) {
+  const map = new Map();
+  (d.sessions || []).forEach(s => {
+    const seen = new Set();
+    (s.timeline || []).forEach(e => { if (e.roll) seen.add(e.roll); });
+    seen.forEach(roll => {
+      if (!map.has(roll)) map.set(roll, []);
+      map.get(roll).push(s.name);
+    });
+  });
+  return map;
+}
+
+const clockOf = ts => {
+  const s = String(ts || "").trim();
+  // "T+59s (device had no clock)" -> "T+59s": the note is not part of the time
+  if (s.startsWith("T+")) return s.split(" ")[0];
+  return s.includes(" ") ? s.split(" ")[1] : s;
+};
+
+function ago(ms) {
+  const s = Math.round(ms / 1000);
+  if (s < 1) return "just now";
+  if (s < 60) return s + "s ago";
+  return Math.round(s / 60) + "m ago";
+}
+
+/* ============================================================
+   Renderers
+   ============================================================ */
+function renderMasthead(d) {
+  const sessions = d.sessions || [];
+  const scans = VIEW.scans.length;
+  const relative = VIEW.scans.some(r => r.src === "uptime");
+  $("#stamp-line").innerHTML = [
+    "<span>" + esc(d.generated || "—") + "</span>",
+    '<span class="d">/</span>',
+    "<span>" + sessions.length + " session" + (sessions.length === 1 ? "" : "s") + "</span>",
+    '<span class="d">/</span>',
+    "<span>" + scans + " scan" + (scans === 1 ? "" : "s") + "</span>",
+    d.__session ? '<span class="d">/</span><span>session ' + (d.__session.index + 1) +
+      " of " + d.__session.total + "</span>" : "",
+    relative ? '<span class="d">/</span><span>booted without a clock — relative times</span>' : ""
+  ].join("");
+}
+
+function renderGauges(d) {
+  const students = d.students || [];
+  const incidents = d.incidents || [];
+  const sessions = d.sessions || [];
+  const serious = incidents.filter(i => bandOf(i.score) !== "WATCH").length;
+  const high = incidents.filter(i => bandOf(i.score) === "HIGH").length;
+  const avg = students.length
+    ? Math.round(students.reduce((sum, x) => sum + x.percent, 0) / students.length) : 0;
+
+  const meta = d.__session;
+  const presentCount = students.filter(s => s.present).length;
+
+  const cells = meta
+    ? [
+        { k: "Session", n: (meta.index + 1) + "/" + meta.total, c: meta.date || meta.name },
+        { k: "Present", n: presentCount, c: "of " + students.length + " in roster" },
+        { k: "Scans", n: ((sessions[0] || {}).timeline || []).length, c: "this session" },
+        { k: "Flagged runs", n: incidents.length, c: "scored windows" },
+        { k: "Review or above", n: serious, c: "want a human look", alert: serious > 0 },
+        { k: "High severity", n: high, c: "treat as proxy", alert: high > 0 }
+      ]
+    : [
+        { k: "Sessions", n: sessions.length, c: "days logged" },
+        { k: "Students", n: students.length, c: "in the roster" },
+        { k: "Attendance", n: avg + "%", c: "average across roster" },
+        { k: "Flagged runs", n: incidents.length, c: "scored windows" },
+        { k: "Review or above", n: serious, c: "want a human look", alert: serious > 0 },
+        { k: "High severity", n: high, c: "treat as proxy", alert: high > 0 }
+      ];
+
+  $("#gauges").innerHTML = cells.map(c =>
+    '<div class="gauge"' + (c.alert ? ' data-alert="1"' : "") + ">" +
+      '<div class="g-k">' + esc(c.k) + "</div>" +
+      '<div class="g-n">' + esc(c.n) + "</div>" +
+      '<div class="g-c">' + esc(c.c) + "</div>" +
+    "</div>").join("");
+}
+
+function renderStudents(d) {
+  const meta = d.__session;
+  const arrived = new Map();
+  if (meta && (d.sessions || [])[0]) {
+    ((d.sessions[0].timeline) || []).forEach(e => {
+      if (e.roll && !arrived.has(e.roll)) arrived.set(e.roll, e.ts);
+    });
+  }
+  const presence = presenceByStudent(d);
+  let students = (d.students || []).slice();
+
+  if (VIEW.q.trim()) {
+    const q = VIEW.q.trim().toLowerCase();
+    students = students.filter(s =>
+      String(s.name || "").toLowerCase().includes(q) ||
+      String(s.roll || "").toLowerCase().includes(q));
+  }
+  students.sort((a, b) => {
+    if (VIEW.sort === "percent") return b.percent - a.percent || a.roll.localeCompare(b.roll);
+    if (VIEW.sort === "flags") return (b.flags || 0) - (a.flags || 0) || a.roll.localeCompare(b.roll);
+    return String(a.roll).localeCompare(String(b.roll));
+  });
+
+  $("#att-head").textContent = meta ? "Arrived" : "Attendance";
+  $("#students-count").textContent = meta
+    ? students.filter(s => s.present).length + " of " + (d.students || []).length + " present"
+    : (d.students || []).length + " enrolled" + (VIEW.q ? " · " + students.length + " shown" : "");
+
+  $("#students").innerHTML = students.length
+    ? students.map(s => {
+        if (meta) {
+          const at = arrived.get(s.roll);
+          return '<tr class="clickable" data-roll="' + esc(s.roll) + '" tabindex="0">' +
+            '<td class="who"><div class="name">' + esc(s.name || s.roll) + "</div>" +
+              '<div class="roll">' + esc(s.roll) + "</div></td>" +
+            "<td>" + (at
+              ? '<span class="pct" style="font-size:13px">' + esc(clockOf(at)) + "</span>" +
+                '<div class="note">first scan</div>'
+              : '<span class="note">no scan this session</span>') + "</td>" +
+            '<td class="flags-cell"><span class="flags-n ' + (s.flags ? "" : "zero") + '">' +
+              (s.flags || "—") + "</span></td>" +
+            '<td class="status-cell"><span class="pill ' + (at ? "ok" : "plain") + '">' +
+              (at ? "present" : "absent") + "</span></td></tr>";
+        }
+        const pips = Array.from({ length: s.total }, (_, i) =>
+          '<span class="pip ' + (i < s.present ? "on" : "off") + '"></span>').join("");
+        return '<tr class="clickable" data-roll="' + esc(s.roll) + '" tabindex="0">' +
+          '<td class="who"><div class="name">' + esc(s.name || s.roll) + "</div>" +
+            '<div class="roll">' + esc(s.roll) + "</div></td>" +
+          "<td>" +
+            '<div class="bar"><i class="' + (s.eligible ? "" : "low") + '" style="width:' +
+              Math.max(2, Math.min(100, s.percent)) + '%"></i></div>' +
+            '<div class="att-line"><span class="pct">' + s.percent + "%</span>" +
+              '<span class="note">' + s.present + "/" + s.total + " days</span></div>" +
+            '<div class="pips">' + pips + "</div>" +
+          "</td>" +
+          '<td class="flags-cell"><span class="flags-n ' + (s.flags ? "" : "zero") + '">' +
+            (s.flags || "—") + "</span></td>" +
+          '<td class="status-cell"><span class="pill ' + (s.eligible ? "ok" : "low") + '">' +
+            (s.eligible ? "eligible" : "below 75%") + "</span></td></tr>";
+      }).join("")
+    : '<tr><td colspan="4"><p class="empty">' + ((d.students || []).length
+        ? "no student matches “" + esc(VIEW.q) + "”"
+        : "no students in this payload yet") + "</p></td></tr>";
+}
+
+function renderIncidents(d) {
+  const all = (d.incidents || []).slice();
+  const order = { HIGH: 0, REVIEW: 1, WATCH: 2, CLEAR: 3 };
+  all.sort((a, b) => order[bandOf(a.score)] - order[bandOf(b.score)] || b.score - a.score);
+
+  let incidents = all;
+  if (VIEW.band === "REVIEW") incidents = all.filter(i => bandOf(i.score) !== "WATCH");
+  if (VIEW.band === "HIGH") incidents = all.filter(i => bandOf(i.score) === "HIGH");
+
+  $("#incidents-count").textContent = all.length
+    ? incidents.length + " of " + all.length : "";
+
+  $("#incidents").innerHTML = incidents.length
+    ? incidents.map(i => {
+        const band = bandOf(i.score);
+        const calc = (i.breakdown && i.breakdown.length) ? (
+          '<details class="calc"><summary>show the calculation</summary>' +
+          '<table class="calc-table"><thead><tr><th>Signal</th><th class="num">Value</th>' +
+            '<th class="num">× weight</th><th class="num">Points</th></tr></thead><tbody>' +
+            i.breakdown.map(b => "<tr><td>" + esc(b.signal) + "</td>" +
+              '<td style="text-align:right">' + b.value.toFixed(2) + "</td>" +
+              '<td style="text-align:right">' + b.weight.toFixed(2) + "</td>" +
+              '<td style="text-align:right">' + b.points.toFixed(3) + "</td></tr>").join("") +
+            '<tr class="sum"><td>raw total</td><td></td><td></td>' +
+              '<td style="text-align:right">' + i.base_score.toFixed(3) + "</td></tr>" +
+            (i.discount ? '<tr class="sum"><td>companion discount</td><td></td><td></td>' +
+              '<td style="text-align:right">−' + i.discount.toFixed(3) + "</td></tr>" : "") +
+            '<tr class="tot"><td>score</td><td></td><td></td>' +
+              '<td style="text-align:right">' + i.score + "/100 " + band + "</td></tr>" +
+          "</tbody></table>" +
+          '<div class="mathline">' + esc(i.math || "") + "</div></details>"
+        ) : "";
+
+        return '<div class="inc">' +
+          '<div class="inc-top">' +
+            '<span class="badge ' + band + '">' + band + "</span>" +
+            '<span class="score">' + i.score + '<span class="meta">/100</span></span>' +
+            '<span class="where">' + esc(i.session) + " · " + esc(i.when || "") + "</span>" +
+          "</div>" +
+          '<div class="cards-line">' +
+            (i.rolls || []).map(r => '<span class="kbd-chip">' + esc(r) + "</span>").join("") +
+            '<span class="note">' + i.cards + " cards in " + i.duration + " s</span>" +
+          "</div>" +
+          '<ul class="why">' + (i.reasons || []).slice(0, 4)
+            .map(r => "<li>" + esc(r) + "</li>").join("") + "</ul>" +
+          calc + "</div>";
+      }).join("")
+    : '<p class="empty">' + (all.length
+        ? "nothing in this band"
+        : "no flagged runs — every scan here looks like normal traffic") + "</p>";
+}
+
+function renderTimeline(d) {
+  const sessions = d.sessions || [];
+  $("#timeline").innerHTML = sessions.length
+    ? sessions.map(s => {
+        const tl = s.timeline || [];
+        const first = tl.length ? clockOf(tl[0].ts) : "";
+        const last = tl.length ? clockOf(tl[tl.length - 1].ts) : "";
+        const relative = tl.some(e => e.src === "uptime");
+        const marks = tl.map(e => {
+          const cls = e.flag ? "flag" : (e.result === "DENIED" ? "denied" : "grant");
+          const label = [e.ts || "", e.roll || "unregistered card", e.result || ""].join(" · ");
+          return '<span class="tick ' + cls + '" style="left:' + e.x + '%" data-tip="' +
+            esc(label) + '" title="' + esc(label) + '"></span>';
+        }).join("");
+        return '<div class="tl-row" data-session="' + esc(s.name) + '">' +
+          '<div class="tl-name">' +
+            '<div class="n">' + esc(s.name) + "</div>" +
+            '<div class="d">' + esc(s.date || "") +
+              (first ? ' <span class="tl-time">' + esc(first) +
+                (last && last !== first ? "–" + esc(last) : "") + "</span>" : "") + "</div>" +
+            '<div class="d">' + s.events + " scans · " + s.students + " present" +
+              (relative ? " · relative clock" : "") + "</div>" +
+          "</div>" +
+          "<div>" +
+            '<div class="strip">' + marks + "</div>" +
+            '<div class="ruler"><span>' + esc(first || "start") + "</span>" +
+              "<span>" + esc(last && last !== first ? last : "") + "</span></div>" +
+          "</div></div>";
+      }).join("")
+    : '<p class="empty">no sessions in this payload</p>';
+}
+
+function filteredScans() {
+  const rows = VIEW.scans;
+  if (VIEW.scan === "granted") return rows.filter(r => r.result === "GRANTED");
+  if (VIEW.scan === "denied") return rows.filter(r => r.result !== "GRANTED");
+  if (VIEW.scan === "flagged") return rows.filter(r => r.flag);
+  return rows;
+}
+
+function renderScans() {
+  const rows = filteredScans();
+  const total = VIEW.scans.length;
+  const LIMIT = 200;
+  const shown = rows.slice(0, LIMIT);
+  const scanCount = n => n + " scan" + (n === 1 ? "" : "s");
+
+  $("#scanlog-count").textContent = total
+    ? (rows.length !== total ? scanCount(rows.length) + " of " + total : scanCount(total)) + " · newest first"
+    : "";
+
+  $("#scanlog").innerHTML = shown.length
+    ? shown.map(r =>
+      '<tr data-seq="' + r.seq + '" class="clickable">' +
+        '<td class="t">' + esc(r.ts || "—") + "</td>" +
+        "<td>" + (r.roll ? esc(r.roll) : '<span class="note">unregistered card</span>') + "</td>" +
+        '<td><span class="pill ' + (r.result === "GRANTED" ? "ok" : "low") + '">' +
+          esc(r.result) + "</span></td>" +
+        '<td class="r">' + esc(r.session) + "</td></tr>").join("")
+    : '<tr><td colspan="4"><p class="empty">' + (total
+        ? "no scans match this filter"
+        : "no scans recorded yet — tap a card") + "</p></td></tr>";
+
+  if (VIEW.newCount > 0) {
+    const fresh = Array.from($("#scanlog").querySelectorAll("tr")).slice(0, VIEW.newCount);
+    fresh.forEach(tr => tr.classList.add("is-new"));
+    const note = $("#flash-note");
+    note.textContent = "+" + VIEW.newCount + " new";
+    note.classList.add("on");
+    setTimeout(() => note.classList.remove("on"), 2600);
+    VIEW.newCount = 0;
+  }
+}
+
+function renderFoot() {
+  $("#foot").innerHTML =
+    "Attendance counts once per day; later taps say ALREADY_MARKED and still open the door. " +
+    "Bands: CLEAR &lt; 30 · WATCH 30–49 · REVIEW 50–69 · HIGH 70+.";
+}
+
+function renderAll(d) {
+  VIEW.data = d;
+  VIEW.scans = scanRows(d);
+  renderMasthead(d);
+  renderGauges(d);
+  renderStudents(d);
+  renderIncidents(d);
+  renderTimeline(d);
+  renderScans();
+  renderFoot();
+  if (VIEW.drawer) drawDrawer();
+}
+
+/* ============================================================
+   Drawer
+   ============================================================ */
+function closeDrawer() {
+  VIEW.drawer = null;
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  $("#scrim").classList.remove("on");
+}
+
+function openStudent(roll) {
+  VIEW.drawer = { kind: "student", roll };
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  $("#scrim").classList.add("on");
+  drawDrawer();
+}
+
+function drawDrawer() {
+  const d = VIEW.data || {};
+  const roll = VIEW.drawer.roll;
+  const st = (d.students || []).find(s => s.roll === roll);
+  if (!st) return closeDrawer();
+
+  const mine = VIEW.scans.filter(r => r.roll === roll).slice().reverse();
+  const bySession = new Map();
+  mine.forEach(r => { if (!bySession.has(r.session)) bySession.set(r.session, r); });
+
+  const days = (d.sessions || []).map(s => {
+    const hit = bySession.get(s.name);
+    return "<tr><td>" + esc(s.name) + '<div class="note">' + esc(s.date || "") + "</div></td>" +
+      "<td>" + (hit ? '<span class="pill ok">present</span>' : '<span class="pill plain">absent</span>') +
+      "</td></tr>";
+  }).join("");
+
+  $("#drawer-title").textContent = st.name || st.roll;
+  $("#drawer-sub").textContent = st.roll + " · " + st.present + "/" + st.total + " days · " + st.percent + "%";
+
+  $("#drawer-body").innerHTML =
+    '<dl class="kv">' +
+      "<dt>Attendance</dt><dd>" + st.percent + "%</dd>" +
+      "<dt>Days present</dt><dd>" + st.present + " of " + st.total + "</dd>" +
+      "<dt>Eligibility (75%)</dt><dd>" + (st.eligible ? "met" : "below") + "</dd>" +
+      "<dt>Flagged runs</dt><dd>" + (st.flags || 0) + "</dd>" +
+      "<dt>First scan seen</dt><dd>" + (mine.length ? esc(mine[0].ts || "—") : "—") + "</dd>" +
+      "<dt>Last scan seen</dt><dd>" + (mine.length ? esc(mine[mine.length - 1].ts || "—") : "—") + "</dd>" +
+    "</dl>" +
+    "<h4>Day by day</h4>" +
+    '<table class="mini">' + (days || '<tr><td colspan="2"><p class="empty">no sessions</p></td></tr>') + "</table>" +
+    "<h4>Their scans (" + mine.length + ")</h4>" +
+    '<table class="mini">' + (mine.length
+      ? mine.slice(0, 40).map(r =>
+          "<tr><td>" + esc(r.ts || "—") + '<div class="note">' + esc(r.session) + "</div></td>" +
+          "<td>" + '<span class="pill ' + (r.result === "GRANTED" ? "ok" : "low") + '">' +
+            esc(r.result) + "</span></td></tr>").join("")
+      : '<tr><td colspan="2"><p class="empty">no scans for this student</p></td></tr>') + "</table>" +
+    "<h4>How this was counted</h4>" +
+    '<p class="note" style="margin:0">One accepted tap per day makes a day present. Repeats that day are ' +
+    "stored as " + '<span class="mono">ALREADY_MARKED</span> and do not change the total. ' +
+    st.present + " ÷ " + st.total + " = " + st.percent + "%.</p>";
+}
+
+/* ============================================================
+   Tooltip on timeline marks
+   ============================================================ */
+const tip = $("#tip");
+document.addEventListener("mouseover", ev => {
+  const t = ev.target.closest(".tick");
+  if (!t) return;
+  tip.textContent = t.dataset.tip || "";
+  const r = t.getBoundingClientRect();
+  tip.style.left = Math.max(8, Math.min(r.left + r.width / 2 - 90, innerWidth - 300)) + "px";
+  tip.style.top = Math.max(8, r.top - 52) + "px";
+  tip.classList.add("on");
+});
+document.addEventListener("mouseout", ev => {
+  if (ev.target.closest(".tick")) tip.classList.remove("on");
+});
+
+/* ============================================================
+   Live polling — the actual fix for "I have to refresh"
+   ============================================================ */
+function setStatus(kind, msg) {
+  $("#ticker").textContent = msg;
+  $("#led").className = "led" + (kind === "live" ? "" : " " + kind);
+  $("#live-label").textContent = kind === "paused" ? "Paused" : kind === "error" ? "Retrying" : "Live";
+  $("#live-btn").setAttribute("aria-pressed", String(kind === "live"));
+}
+
+let lastOkAt = 0;
+let errorState = false;
+let pollTimer = null;
+let pollDelay = 2000;      // grows while the receiver is away, so a saved copy
+                           // does not hammer a plain file server
+
+function tick() {
+  if (VIEW.demo) {
+    const total = (VIEW.embedded.sessions || []).length;
+    return setStatus("sample", "sample data · " +
+      (VIEW.demoIndex == null ? "all " + total + " sessions"
+                              : "session " + (VIEW.demoIndex + 1) + "/" + total) + " · not live");
+  }
+  if (!VIEW.live) return setStatus("paused", "paused — press Live to resume");
+  if (errorState) {
+    return lastOkAt
+      ? setStatus("error", "receiver stopped answering — retrying every 2 s")
+      : setStatus("paused", "no receiver here — showing the saved copy");
+  }
+  if (!lastOkAt) return setStatus("paused", "looking for a receiver…");
+  setStatus("live", "live · updated " + ago(Date.now() - lastOkAt));
+}
+
+async function poll() {
+  if (VIEW.demo || !VIEW.live || document.hidden) return;
+  try {
+    const res = await fetch("/api/summary", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const d = await res.json();
+    if (!d || !Array.isArray(d.students)) throw new Error("bad payload");
+
+    lastOkAt = Date.now();
+    errorState = false;
+
+    const scanTotal = (d.sessions || []).reduce((n, s) => n + (s.timeline || []).length, 0);
+    const sig = [
+      scanTotal,
+      (d.sessions || []).length,
+      (d.students || []).length,
+      (d.incidents || []).length,
+      (d.students || []).map(s => s.percent).join(",")
+    ].join("|");
+
+    pollDelay = 2000;
+
+    if (sig !== VIEW.lastSig) {
+      const previous = VIEW.scans.length;
+      renderAll(d);
+      if (VIEW.lastSig && VIEW.scans.length > previous) {
+        VIEW.newCount = VIEW.scans.length - previous;
+        renderScans();
+      }
+      VIEW.lastSig = sig;
+    }
+    tick();
+  } catch (err) {
+    errorState = true;
+    pollDelay = Math.min(Math.round(pollDelay * 1.75), 20000);
+    tick();
+  }
+}
+
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  pollTimer = setTimeout(async () => {
+    await poll();
+    schedulePoll();
+  }, pollDelay);
+}
+
+$("#live-btn").addEventListener("click", () => {
+  if (VIEW.demo) return exitDemo();          // "Live" while on sample = go back to live
+  VIEW.live = !VIEW.live;
+  if (VIEW.live) {
+    pollDelay = 2000;
+    poll();
+    schedulePoll();
+    setStatus("live", "live · checking now");
+  } else {
+    clearTimeout(pollTimer);
+    setStatus("paused", "paused — nothing is being fetched");
+  }
+});
+
+/* ============================================================
+   Sample-data mode: the synthetic dataset embedded in this file,
+   for demos with two cards (or no cards at all).
+   ============================================================ */
+function demoPayload(index) {
+  const all = VIEW.embedded;
+  const s = all.sessions[index];
+  const present = new Set();
+  (s.timeline || []).forEach(e => { if (e.roll) present.add(e.roll); });
+  const inc = (all.incidents || []).filter(i => i.session === s.name);
+  const flagged = new Map();
+  inc.forEach(i => (i.rolls || []).forEach(r => flagged.set(r, (flagged.get(r) || 0) + 1)));
+  const students = (all.students || []).map(st => ({
+    roll: st.roll, name: st.name,
+    present: present.has(st.roll) ? 1 : 0,
+    total: 1,
+    percent: present.has(st.roll) ? 100 : 0,
+    eligible: present.has(st.roll),
+    flags: flagged.get(st.roll) || 0
+  }));
+  return {
+    generated: all.generated,
+    sessions: [s],
+    students: students,
+    incidents: inc,
+    __session: { name: s.name, date: s.date || "", index: index,
+                 total: (all.sessions || []).length }
+  };
+}
+
+function renderSample() {
+  const all = VIEW.embedded;
+  if (!all || !(all.sessions || []).length) return;
+  const total = all.sessions.length;
+  const index = VIEW.demoIndex;
+  const view = index == null ? all : demoPayload(index);
+
+  VIEW.demo = true;
+  VIEW.live = false;
+  clearTimeout(pollTimer);
+  VIEW.lastSig = "";
+  renderAll(view);
+
+  const btn = $("#demo-btn");
+  btn.setAttribute("aria-pressed", "true");
+  btn.classList.add("active");
+  $("#demo-banner").classList.add("on");
+
+  const scans = index == null
+    ? (all.sessions || []).reduce((n, s) => n + (s.timeline || []).length, 0)
+    : (all.sessions[index].timeline || []).length;
+  const flagged = index == null
+    ? (all.incidents || []).length
+    : (all.incidents || []).filter(i => i.session === all.sessions[index].name).length;
+
+  $("#demo-pos").textContent = index == null ? "all " + total : (index + 1) + " / " + total;
+  $("#demo-text").innerHTML = index == null
+    ? "The <strong>synthetic test dataset</strong>: " + total + " sessions, " +
+      (all.students || []).length + " students, " + scans + " scans, " + flagged +
+      " flagged runs, generated by <code>analysis/simulate.py</code> and scored by " +
+      "<code>detect.py</code>. Press <strong>Next</strong> to walk the sessions one at a time."
+    : "Session <strong>" + esc(all.sessions[index].name) + "</strong> · " + (index + 1) +
+      " of " + total + " · " + esc(all.sessions[index].date || "") + " · " + scans +
+      " scans · " + flagged + " flagged run" + (flagged === 1 ? "" : "s") +
+      ". Generated data — no card produced it.";
+
+  setStatus("sample", "sample data · " +
+             (index == null ? "all " + total + " sessions" : "session " + (index + 1) + "/" + total) +
+             " · not live");
+}
+
+function stepDemo(delta) {
+  const total = (VIEW.embedded.sessions || []).length;
+  if (!total) return;
+  const index = VIEW.demoIndex;
+  VIEW.demoIndex = index == null
+    ? (delta > 0 ? 0 : total - 1)
+    : (index + delta + total) % total;
+  renderSample();
+}
+
+function exitDemo() {
+  VIEW.demo = false;
+  VIEW.demoIndex = null;
+  VIEW.live = true;
+  const btn = $("#demo-btn");
+  btn.setAttribute("aria-pressed", "false");
+  btn.classList.remove("active");
+  $("#demo-banner").classList.remove("on");
+  VIEW.lastSig = "";
+  pollDelay = 2000;
+  poll();
+  schedulePoll();
+  setStatus("live", "live · checking now");
+}
+
+$("#demo-btn").addEventListener("click", () => {
+  if (!VIEW.demo) { VIEW.demoIndex = 0; renderSample(); } else { stepDemo(1); }
+});
+$("#demo-prev").addEventListener("click", () => stepDemo(-1));
+$("#demo-next").addEventListener("click", () => stepDemo(1));
+$("#demo-all").addEventListener("click", () => { VIEW.demoIndex = null; renderSample(); });
+$("#demo-exit").addEventListener("click", exitDemo);
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && VIEW.live) {
+    pollDelay = 2000;
+    poll();
+    schedulePoll();
+  }
+});
+
+/* ============================================================
+   Controls
+   ============================================================ */
+$("#q").addEventListener("input", ev => {
+  VIEW.q = ev.target.value;
+  renderStudents(VIEW.data);
+});
+
+document.querySelectorAll("[data-sort]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    VIEW.sort = btn.dataset.sort;
+    document.querySelectorAll("[data-sort]").forEach(b =>
+      b.setAttribute("aria-pressed", String(b === btn)));
+    renderStudents(VIEW.data);
+  });
+});
+
+document.querySelectorAll("[data-band]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    VIEW.band = btn.dataset.band;
+    document.querySelectorAll("[data-band]").forEach(b =>
+      b.setAttribute("aria-pressed", String(b === btn)));
+    renderIncidents(VIEW.data);
+  });
+});
+
+document.querySelectorAll("[data-scan]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    VIEW.scan = btn.dataset.scan;
+    document.querySelectorAll("[data-scan]").forEach(b =>
+      b.setAttribute("aria-pressed", String(b === btn)));
+    renderScans();
+  });
+});
+
+$("#students").addEventListener("click", ev => {
+  const tr = ev.target.closest("tr[data-roll]");
+  if (tr) openStudent(tr.dataset.roll);
+});
+$("#students").addEventListener("keydown", ev => {
+  const tr = ev.target.closest("tr[data-roll]");
+  if (tr && (ev.key === "Enter" || ev.key === " ")) {
+    ev.preventDefault();
+    openStudent(tr.dataset.roll);
+  }
+});
+$("#scanlog").addEventListener("click", ev => {
+  const tr = ev.target.closest("tr[data-seq]");
+  if (!tr) return;
+  const row = VIEW.scans.find(r => String(r.seq) === tr.dataset.seq);
+  if (row && row.roll) openStudent(row.roll);
+});
+$("#drawer-close").addEventListener("click", closeDrawer);
+$("#scrim").addEventListener("click", closeDrawer);
+
+/* theme */
+function applyTheme(name) {
+  VIEW.theme = name;
+  document.documentElement.dataset.theme = name;
+  document.querySelectorAll("[data-theme-btn]").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.themeBtn === name)));
+  try { localStorage.setItem("rfid-theme", name); } catch (e) {}
+}
+document.querySelectorAll("[data-theme-btn]").forEach(btn => {
+  btn.addEventListener("click", () => applyTheme(btn.dataset.themeBtn));
+});
+
+/* guide */
+const guide = $("#guide");
+function openGuide(anchor) {
+  guide.classList.add("on");
+  const scroller = guide.querySelector(".overlay-scroll");
+  scroller.scrollTop = 0;
+  const target = anchor ? guide.querySelector(anchor) : null;
+  if (target) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+  try { localStorage.setItem("rfid-guide-seen", "1"); } catch (e) {}
+  $("#nudge").classList.remove("on");
+  $("#guide-close").focus();
+}
+function closeGuide() {
+  guide.classList.remove("on");
+  $("#open-guide").focus();
+}
+$("#open-guide").addEventListener("click", () => openGuide());
+$("#wifi-open").addEventListener("click", () => openGuide("#g-wifi"));
+$("#nudge-open").addEventListener("click", () => openGuide());
+$("#guide-close").addEventListener("click", closeGuide);
+guide.addEventListener("click", ev => { if (ev.target === guide) closeGuide(); });
+guide.querySelectorAll(".toc a").forEach(a =>
+  a.addEventListener("click", ev => {
+    ev.preventDefault();
+    const el = guide.querySelector(a.getAttribute("href"));
+    if (el) el.scrollIntoView({ block: "start" });
+  }));
+
+$("#print-btn").addEventListener("click", () => window.print());
+
+/* keyboard */
+document.addEventListener("keydown", ev => {
+  const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if (ev.key === "Escape") {
+    if (guide.classList.contains("on")) return closeGuide();
+    if (VIEW.drawer) return closeDrawer();
+    if (VIEW.demo) return exitDemo();
+  }
+  if (typing) return;
+  if (ev.key === "?" || ev.key === "h") { ev.preventDefault(); openGuide(); }
+  if (ev.key === "/") { ev.preventDefault(); $("#q").focus(); }
+  if (ev.key === "t") applyTheme(VIEW.theme === "paper" ? "night" : "paper");
+  if (ev.key === "s") {
+    if (!VIEW.demo) { VIEW.demoIndex = 0; renderSample(); } else { stepDemo(1); }
+  }
+  if (VIEW.demo && ev.key === "ArrowRight") { ev.preventDefault(); stepDemo(1); }
+  if (VIEW.demo && ev.key === "ArrowLeft") { ev.preventDefault(); stepDemo(-1); }
+});
+
+/* payload load + boot */
+$("#file").addEventListener("change", ev => {
+  const f = ev.target.files && ev.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const d = JSON.parse(reader.result);
+      VIEW.lastSig = "";
+      VIEW.demo = false;
+      VIEW.demoIndex = null;
+      $("#demo-banner").classList.remove("on");
+      $("#demo-btn").classList.remove("active");
+      $("#demo-btn").setAttribute("aria-pressed", "false");
+      renderAll(d);
+      VIEW.live = false;
+      setStatus("paused", "static payload · " + f.name);
+    } catch (err) {
+      alert("That file is not a dashboard payload: " + err.message);
+    }
+  };
+  reader.readAsText(f);
+});
+
+(function boot() {
+  let saved = null;
+  try { saved = localStorage.getItem("rfid-theme"); } catch (e) {}
+  applyTheme(saved === "night" ? "night" : "paper");
+
+  const embedded = JSON.parse(document.getElementById("payload").textContent);
+  VIEW.embedded = embedded;
+  if (!(embedded.students || []).length) {
+    $("#demo-btn").disabled = true;
+    $("#demo-btn").title = "this payload carries no sample data";
+  }
+  renderAll(embedded);
+  setStatus("paused", "checking for a live receiver…");
+
+  if (location.protocol === "file:") {
+    setStatus("paused", "opened from disk — saved payload, not live data");
+    $("#demo-btn").disabled = true;
+    $("#demo-btn").title = "this page is already showing its saved dataset";
+    return;
+  }
+
+  poll();
+  schedulePoll();
+  setInterval(tick, 1000);
+
+  try {
+    if (!localStorage.getItem("rfid-guide-seen") && (embedded.students || []).length) {
+      $("#nudge").classList.add("on");
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

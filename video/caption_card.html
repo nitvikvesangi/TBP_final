@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>caption</title>
+<style>
+  html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; }
+  body { display: flex; align-items: flex-end; }
+  .cap {
+    margin: 0 0 30px 70px;
+    display: inline-block;
+    max-width: 1700px;
+    background: rgba(246, 242, 233, 0.92);
+    color: #1c1b19;
+    font: 400 34px/1.3 Georgia, "Iowan Old Style", "Times New Roman", serif;
+    padding: 14px 22px;
+    border-left: 3px solid #b23a1f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+</head>
+<body>
+  <div class="cap" id="cap"></div>
+  <script>
+    const text = new URLSearchParams(location.search).get('text') || '';
+    document.getElementById('cap').textContent = text;
+  </script>
+</body>
+</html>

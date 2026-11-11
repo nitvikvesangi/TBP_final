@@ -1,0 +1,67 @@
+{
+  "sessions": [
+    {
+      "file": "session_01.ndjson",
+      "kind": "clean",
+      "proxy": [],
+      "probing": false
+    },
+    {
+      "file": "session_02.ndjson",
+      "kind": "clean",
+      "proxy": [],
+      "probing": false
+    },
+    {
+      "file": "session_03.ndjson",
+      "kind": "proxy",
+      "proxy": [
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "probing": false
+    },
+    {
+      "file": "session_04.ndjson",
+      "kind": "clean",
+      "proxy": [],
+      "probing": false
+    },
+    {
+      "file": "session_05.ndjson",
+      "kind": "proxy",
+      "proxy": [
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "probing": false
+    },
+    {
+      "file": "session_06.ndjson",
+      "kind": "probing",
+      "proxy": [],
+      "probing": true
+    },
+    {
+      "file": "session_07.ndjson",
+      "kind": "clean",
+      "proxy": [],
+      "probing": false
+    },
+    {
+      "file": "session_08.ndjson",
+      "kind": "proxy",
+      "proxy": [
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "probing": false
+    }
+  ]
+}

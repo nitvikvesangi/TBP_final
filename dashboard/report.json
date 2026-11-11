@@ -1,0 +1,1660 @@
+{
+  "generated": "11 Nov 2026, 21:54",
+  "sessions": [
+    {
+      "name": "session_01",
+      "events": 14,
+      "students": 14,
+      "incidents": 1,
+      "date": "2026-11-07",
+      "flagged": false,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-04",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:05",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 1.62,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:06",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 3.84,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:07",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 6.48,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:08",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 23.21,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:14",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 33.04,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:17",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 38.35,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:19",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 43.64,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:21",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 53.49,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:24",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 64.18,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:28",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 68.3,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:29",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 75.06,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:32",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 88.86,
+          "roll": "CS-16",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:37",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 10:00:41",
+          "src": "ntp",
+          "flag": false
+        }
+      ]
+    },
+    {
+      "name": "session_02",
+      "events": 15,
+      "students": 15,
+      "incidents": 0,
+      "date": "2026-11-07",
+      "flagged": false,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:06",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 5.53,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:09",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 8.45,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:10",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 12.45,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:12",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 24.21,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:18",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 32.06,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:22",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 41.42,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:27",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 46.22,
+          "roll": "CS-04",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:30",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 50.05,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:32",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 57.46,
+          "roll": "CS-16",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:35",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 65.71,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:40",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 73.35,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:44",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 78.59,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:46",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 88.88,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:52",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 11:00:57",
+          "src": "ntp",
+          "flag": false
+        }
+      ]
+    },
+    {
+      "name": "session_03",
+      "events": 17,
+      "students": 17,
+      "incidents": 2,
+      "date": "2026-11-07",
+      "flagged": true,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:05",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 7.6,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:08",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 18.79,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:12",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 25.56,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:14",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 27.76,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:15",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 29.28,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:16",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 31.67,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:17",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 43.45,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:21",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 52.85,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:25",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 60.1,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:27",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 74.61,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:33",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 81.12,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:35",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 97.42,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:41",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 98.34,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:41",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 98.91,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:41",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 99.32,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:42",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 12:00:42",
+          "src": "ntp",
+          "flag": true
+        }
+      ]
+    },
+    {
+      "name": "session_04",
+      "events": 13,
+      "students": 13,
+      "incidents": 1,
+      "date": "2026-11-07",
+      "flagged": false,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:03",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 1.36,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:04",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 3.04,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:05",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 16.87,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:11",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 27.66,
+          "roll": "CS-16",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:15",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 37.87,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:20",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 42.82,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:22",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 47.3,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:24",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 55.93,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:28",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 62.13,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:31",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 69.94,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:34",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 79.77,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:38",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 13:00:47",
+          "src": "ntp",
+          "flag": false
+        }
+      ]
+    },
+    {
+      "name": "session_05",
+      "events": 17,
+      "students": 17,
+      "incidents": 1,
+      "date": "2026-11-07",
+      "flagged": true,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:04",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 3.99,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:06",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 14.67,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:10",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 18.85,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:12",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 24.96,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:14",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 30.44,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:16",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 41.47,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:21",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 47.2,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:23",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 54.02,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:26",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 65.38,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:30",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 75.39,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:34",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 82.69,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:37",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 97.63,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:43",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 98.18,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 99.0,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 99.38,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 14:00:44",
+          "src": "ntp",
+          "flag": true
+        }
+      ]
+    },
+    {
+      "name": "session_06",
+      "events": 18,
+      "students": 13,
+      "incidents": 1,
+      "date": "2026-11-07",
+      "flagged": false,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:06",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 4.02,
+          "roll": "CS-04",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:08",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 15.87,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:15",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 21.93,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:18",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 30.01,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:23",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 33.04,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:25",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 41.49,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:30",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 45.43,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:32",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 51.68,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:35",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 57.55,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:39",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 62.9,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:42",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 69.13,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:45",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 72.91,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 15:00:48",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 89.93,
+          "roll": "",
+          "result": "DENIED",
+          "ts": "2026-11-07 15:00:57",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 92.39,
+          "roll": "",
+          "result": "DENIED",
+          "ts": "2026-11-07 15:00:59",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 94.3,
+          "roll": "",
+          "result": "DENIED",
+          "ts": "2026-11-07 15:01:00",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 96.78,
+          "roll": "",
+          "result": "DENIED",
+          "ts": "2026-11-07 15:01:01",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 100.0,
+          "roll": "",
+          "result": "DENIED",
+          "ts": "2026-11-07 15:01:03",
+          "src": "ntp",
+          "flag": false
+        }
+      ]
+    },
+    {
+      "name": "session_07",
+      "events": 12,
+      "students": 12,
+      "incidents": 0,
+      "date": "2026-11-07",
+      "flagged": false,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:09",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 12.67,
+          "roll": "CS-05",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:14",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 27.28,
+          "roll": "CS-12",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:19",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 43.41,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:25",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 46.3,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:26",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 58.17,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:31",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 65.69,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:34",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 72.8,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:36",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 77.65,
+          "roll": "CS-02",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:38",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 85.69,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:41",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 91.46,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:43",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-08",
+          "result": "GRANTED",
+          "ts": "2026-11-07 16:00:47",
+          "src": "ntp",
+          "flag": false
+        }
+      ]
+    },
+    {
+      "name": "session_08",
+      "events": 16,
+      "students": 16,
+      "incidents": 2,
+      "date": "2026-11-07",
+      "flagged": true,
+      "timeline": [
+        {
+          "x": 0.0,
+          "roll": "CS-16",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:10",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 11.25,
+          "roll": "CS-10",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:14",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 19.91,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:17",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 32.27,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:21",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 48.69,
+          "roll": "CS-04",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:27",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 51.4,
+          "roll": "CS-13",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:28",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 53.28,
+          "roll": "CS-15",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:28",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 55.03,
+          "roll": "CS-14",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:29",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 68.92,
+          "roll": "CS-07",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:34",
+          "src": "ntp",
+          "flag": false
+        },
+        {
+          "x": 75.35,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:36",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 79.97,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:37",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 97.41,
+          "roll": "CS-01",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:43",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 97.82,
+          "roll": "CS-03",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 98.69,
+          "roll": "CS-06",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 99.33,
+          "roll": "CS-09",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:44",
+          "src": "ntp",
+          "flag": true
+        },
+        {
+          "x": 100.0,
+          "roll": "CS-11",
+          "result": "GRANTED",
+          "ts": "2026-11-07 17:00:44",
+          "src": "ntp",
+          "flag": true
+        }
+      ]
+    }
+  ],
+  "students": [
+    {
+      "roll": "CS-01",
+      "name": "Aisha",
+      "present": 6,
+      "total": 8,
+      "percent": 75,
+      "flags": 3,
+      "eligible": true
+    },
+    {
+      "roll": "CS-02",
+      "name": "Rohit",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-03",
+      "name": "Sara",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 3,
+      "eligible": true
+    },
+    {
+      "roll": "CS-04",
+      "name": "Imran",
+      "present": 4,
+      "total": 8,
+      "percent": 50,
+      "flags": 0,
+      "eligible": false
+    },
+    {
+      "roll": "CS-05",
+      "name": "Neha",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-06",
+      "name": "Vikram",
+      "present": 8,
+      "total": 8,
+      "percent": 100,
+      "flags": 3,
+      "eligible": true
+    },
+    {
+      "roll": "CS-07",
+      "name": "Priya",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-08",
+      "name": "Arjun",
+      "present": 6,
+      "total": 8,
+      "percent": 75,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-09",
+      "name": "Meera",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 3,
+      "eligible": true
+    },
+    {
+      "roll": "CS-10",
+      "name": "Kabir",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-11",
+      "name": "Ananya",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 3,
+      "eligible": true
+    },
+    {
+      "roll": "CS-12",
+      "name": "Rahul",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-13",
+      "name": "Zara",
+      "present": 6,
+      "total": 8,
+      "percent": 75,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-14",
+      "name": "Dev",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-15",
+      "name": "Isha",
+      "present": 7,
+      "total": 8,
+      "percent": 88,
+      "flags": 0,
+      "eligible": true
+    },
+    {
+      "roll": "CS-16",
+      "name": "Manav",
+      "present": 4,
+      "total": 8,
+      "percent": 50,
+      "flags": 0,
+      "eligible": false
+    }
+  ],
+  "incidents": [
+    {
+      "session": "session_01",
+      "score": 30,
+      "band": "WATCH",
+      "kind": "STACK-TAP",
+      "when": "2026-11-07 10:00:05",
+      "breakdown": [
+        {
+          "signal": "impossible-gap",
+          "value": 0.0,
+          "weight": 0.4,
+          "points": 0.0,
+          "note": "0/3 gaps under 0.5s"
+        },
+        {
+          "signal": "burst",
+          "value": 0.667,
+          "weight": 0.2,
+          "points": 0.133,
+          "note": "4 cards in 2.28s"
+        },
+        {
+          "signal": "crowd-anomaly",
+          "value": 0.153,
+          "weight": 0.12,
+          "points": 0.018,
+          "note": "vs this student's usual neighbours"
+        },
+        {
+          "signal": "tight-gaps",
+          "value": 1.0,
+          "weight": 0.1,
+          "points": 0.1,
+          "note": "3/3 gaps in 0.5-1.2s"
+        },
+        {
+          "signal": "order-rigidity",
+          "value": 0.0,
+          "weight": 0.1,
+          "points": 0.0,
+          "note": "this exact chain seen 0x before"
+        },
+        {
+          "signal": "new-cards",
+          "value": 1.0,
+          "weight": 0.05,
+          "points": 0.05,
+          "note": "share never seen in earlier sessions"
+        },
+        {
+          "signal": "nearby-denials",
+          "value": 0.0,
+          "weight": 0.03,
+          "points": 0.0,
+          "note": "unregistered cards in the same window"
+        }
+      ],
+      "base_score": 0.302,
+      "discount": 0.0,
+      "math": "(0.40x0.00 + 0.20x0.67 + 0.12x0.15 + 0.10x1.00 + 0.10x0.00 + 0.05x1.00 + 0.03x0.00) = 0.302 -> 30/100 WATCH",
+      "time": "05:30:05.920",
+      "duration": 2.28,
+      "cards": 4,
+      "rolls": [
+        "CS-04",
+        "CS-15",
+        "CS-14",
+        "CS-13"
+      ],
+      "reasons": [
+        "burst 4 cards in 2.3s",
+        "100% of cards never seen before"
+      ],
+      "events": [
+        {
+          "roll": "CS-04",
+          "name": "Imran",
+          "time": "05:30:05.920"
+        },
+        {
+          "roll": "CS-15",
+          "name": "Isha",
+          "time": "05:30:06.490"
+        },
+        {
+          "roll": "CS-14",
+          "name": "Dev",
+          "time": "05:30:07.270"
+        },
+        {
+          "roll": "CS-13",
+          "name": "Zara",
+          "time": "05:30:08.200"
+        }
+      ]
+    },
+    {
+      "session": "session_03",
+      "score": 63,
+      "band": "REVIEW",
+      "kind": "STACK-TAP",
+      "when": "2026-11-07 12:00:41",
+      "breakdown": [
+        {
+          "signal": "impossible-gap",
+          "value": 1.0,
+          "weight": 0.4,
+          "points": 0.4,
+          "note": "4/4 gaps under 0.5s"
+        },
+        {
+          "signal": "burst",
+          "value": 1.0,
+          "weight": 0.2,
+          "points": 0.2,
+          "note": "5 cards in 0.95s"
+        },
+        {
+          "signal": "crowd-anomaly",
+          "value": 0.244,
+          "weight": 0.12,
+          "points": 0.029,
+          "note": "vs this student's usual neighbours"
+        },
+        {
+          "signal": "tight-gaps",
+          "value": 0.0,
+          "weight": 0.1,
+          "points": 0.0,
+          "note": "0/4 gaps in 0.5-1.2s"
+        },
+        {
+          "signal": "order-rigidity",
+          "value": 0.0,
+          "weight": 0.1,
+          "points": 0.0,
+          "note": "this exact chain seen 0x before"
+        },
+        {
+          "signal": "new-cards",
+          "value": 0.0,
+          "weight": 0.05,
+          "points": 0.0,
+          "note": "share never seen in earlier sessions"
+        },
+        {
+          "signal": "nearby-denials",
+          "value": 0.0,
+          "weight": 0.03,
+          "points": 0.0,
+          "note": "unregistered cards in the same window"
+        }
+      ],
+      "base_score": 0.629,
+      "discount": 0.0,
+      "math": "(0.40x1.00 + 0.20x1.00 + 0.12x0.24 + 0.10x0.00 + 0.10x0.00 + 0.05x0.00 + 0.03x0.00) = 0.629 -> 63/100 REVIEW",
+      "time": "07:30:41.440",
+      "duration": 0.95,
+      "cards": 5,
+      "rolls": [
+        "CS-01",
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "reasons": [
+        "impossible-gap 100% of pairs under 0.5s",
+        "burst 5 cards in 1.0s"
+      ],
+      "events": [
+        {
+          "roll": "CS-01",
+          "name": "Aisha",
+          "time": "07:30:41.440"
+        },
+        {
+          "roll": "CS-03",
+          "name": "Sara",
+          "time": "07:30:41.780"
+        },
+        {
+          "roll": "CS-06",
+          "name": "Vikram",
+          "time": "07:30:41.990"
+        },
+        {
+          "roll": "CS-09",
+          "name": "Meera",
+          "time": "07:30:42.140"
+        },
+        {
+          "roll": "CS-11",
+          "name": "Ananya",
+          "time": "07:30:42.390"
+        }
+      ]
+    },
+    {
+      "session": "session_05",
+      "score": 71,
+      "band": "HIGH",
+      "kind": "STACK-TAP",
+      "when": "2026-11-07 14:00:43",
+      "breakdown": [
+        {
+          "signal": "impossible-gap",
+          "value": 1.0,
+          "weight": 0.4,
+          "points": 0.4,
+          "note": "4/4 gaps under 0.5s"
+        },
+        {
+          "signal": "burst",
+          "value": 1.0,
+          "weight": 0.2,
+          "points": 0.2,
+          "note": "5 cards in 0.95s"
+        },
+        {
+          "signal": "crowd-anomaly",
+          "value": 0.485,
+          "weight": 0.12,
+          "points": 0.058,
+          "note": "vs this student's usual neighbours"
+        },
+        {
+          "signal": "tight-gaps",
+          "value": 0.0,
+          "weight": 0.1,
+          "points": 0.0,
+          "note": "0/4 gaps in 0.5-1.2s"
+        },
+        {
+          "signal": "order-rigidity",
+          "value": 0.5,
+          "weight": 0.1,
+          "points": 0.05,
+          "note": "this exact chain seen 1x before"
+        },
+        {
+          "signal": "new-cards",
+          "value": 0.0,
+          "weight": 0.05,
+          "points": 0.0,
+          "note": "share never seen in earlier sessions"
+        },
+        {
+          "signal": "nearby-denials",
+          "value": 0.0,
+          "weight": 0.03,
+          "points": 0.0,
+          "note": "unregistered cards in the same window"
+        }
+      ],
+      "base_score": 0.708,
+      "discount": 0.0,
+      "math": "(0.40x1.00 + 0.20x1.00 + 0.12x0.48 + 0.10x0.00 + 0.10x0.50 + 0.05x0.00 + 0.03x0.00) = 0.708 -> 71/100 HIGH",
+      "time": "09:30:43.840",
+      "duration": 0.95,
+      "cards": 5,
+      "rolls": [
+        "CS-01",
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "reasons": [
+        "impossible-gap 100% of pairs under 0.5s",
+        "burst 5 cards in 1.0s",
+        "same-ordered-chain seen 1x before",
+        "crowd-anomaly z-score 0.49 vs this student's history"
+      ],
+      "events": [
+        {
+          "roll": "CS-01",
+          "name": "Aisha",
+          "time": "09:30:43.840"
+        },
+        {
+          "roll": "CS-03",
+          "name": "Sara",
+          "time": "09:30:44.060"
+        },
+        {
+          "roll": "CS-06",
+          "name": "Vikram",
+          "time": "09:30:44.390"
+        },
+        {
+          "roll": "CS-09",
+          "name": "Meera",
+          "time": "09:30:44.540"
+        },
+        {
+          "roll": "CS-11",
+          "name": "Ananya",
+          "time": "09:30:44.790"
+        }
+      ]
+    },
+    {
+      "session": "session_06",
+      "score": 80,
+      "band": "HIGH",
+      "kind": "PROBING",
+      "when": "2026-11-07 15:00:57",
+      "breakdown": [],
+      "base_score": 0.8,
+      "discount": 0.0,
+      "math": "0.55 + 0.05x5 denies = 0.80 -> 80/100 HIGH",
+      "time": "10:30:57.840",
+      "duration": 5.78,
+      "cards": 0,
+      "rolls": [],
+      "reasons": [
+        "5 unregistered cards rejected in 6s - credential probing"
+      ],
+      "events": [
+        {
+          "roll": "(unknown)",
+          "name": "",
+          "time": "10:30:57.840"
+        },
+        {
+          "roll": "(unknown)",
+          "name": "",
+          "time": "10:30:59.250"
+        },
+        {
+          "roll": "(unknown)",
+          "name": "",
+          "time": "10:31:00.350"
+        },
+        {
+          "roll": "(unknown)",
+          "name": "",
+          "time": "10:31:01.770"
+        },
+        {
+          "roll": "(unknown)",
+          "name": "",
+          "time": "10:31:03.620"
+        }
+      ]
+    },
+    {
+      "session": "session_08",
+      "score": 71,
+      "band": "HIGH",
+      "kind": "STACK-TAP",
+      "when": "2026-11-07 17:00:43",
+      "breakdown": [
+        {
+          "signal": "impossible-gap",
+          "value": 1.0,
+          "weight": 0.4,
+          "points": 0.4,
+          "note": "4/4 gaps under 0.5s"
+        },
+        {
+          "signal": "burst",
+          "value": 1.0,
+          "weight": 0.2,
+          "points": 0.2,
+          "note": "5 cards in 0.89s"
+        },
+        {
+          "signal": "crowd-anomaly",
+          "value": 0.432,
+          "weight": 0.12,
+          "points": 0.052,
+          "note": "vs this student's usual neighbours"
+        },
+        {
+          "signal": "tight-gaps",
+          "value": 0.0,
+          "weight": 0.1,
+          "points": 0.0,
+          "note": "0/4 gaps in 0.5-1.2s"
+        },
+        {
+          "signal": "order-rigidity",
+          "value": 0.571,
+          "weight": 0.1,
+          "points": 0.057,
+          "note": "this exact chain seen 2x before"
+        },
+        {
+          "signal": "new-cards",
+          "value": 0.0,
+          "weight": 0.05,
+          "points": 0.0,
+          "note": "share never seen in earlier sessions"
+        },
+        {
+          "signal": "nearby-denials",
+          "value": 0.0,
+          "weight": 0.03,
+          "points": 0.0,
+          "note": "unregistered cards in the same window"
+        }
+      ],
+      "base_score": 0.709,
+      "discount": 0.0,
+      "math": "(0.40x1.00 + 0.20x1.00 + 0.12x0.43 + 0.10x0.00 + 0.10x0.57 + 0.05x0.00 + 0.03x0.00) = 0.709 -> 71/100 HIGH",
+      "time": "12:30:43.900",
+      "duration": 0.89,
+      "cards": 5,
+      "rolls": [
+        "CS-01",
+        "CS-03",
+        "CS-06",
+        "CS-09",
+        "CS-11"
+      ],
+      "reasons": [
+        "impossible-gap 100% of pairs under 0.5s",
+        "burst 5 cards in 0.9s",
+        "same-ordered-chain seen 2x before",
+        "crowd-anomaly z-score 0.43 vs this student's history"
+      ],
+      "events": [
+        {
+          "roll": "CS-01",
+          "name": "Aisha",
+          "time": "12:30:43.900"
+        },
+        {
+          "roll": "CS-03",
+          "name": "Sara",
+          "time": "12:30:44.040"
+        },
+        {
+          "roll": "CS-06",
+          "name": "Vikram",
+          "time": "12:30:44.340"
+        },
+        {
+          "roll": "CS-09",
+          "name": "Meera",
+          "time": "12:30:44.560"
+        },
+        {
+          "roll": "CS-11",
+          "name": "Ananya",
+          "time": "12:30:44.790"
+        }
+      ]
+    }
+  ]
+}

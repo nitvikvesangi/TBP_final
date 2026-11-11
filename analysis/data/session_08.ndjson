@@ -1,0 +1,16 @@
+{"uid": "50 5B 66 71", "name": "Manav", "roll": "CS-16", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25210.39, "ts": "2026-11-07T17:00:10", "src": "ntp"}
+{"uid": "72 7D 88 93", "name": "Kabir", "roll": "CS-10", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25214.26, "ts": "2026-11-07T17:00:14", "src": "ntp"}
+{"uid": "DE E9 F4 FF", "name": "Vikram", "roll": "CS-06", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25217.24, "ts": "2026-11-07T17:00:17", "src": "ntp"}
+{"uid": "4D 58 63 6E", "name": "Meera", "roll": "CS-09", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25221.49, "ts": "2026-11-07T17:00:21", "src": "ntp"}
+{"uid": "94 9F AA B5", "name": "Imran", "roll": "CS-04", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25227.14, "ts": "2026-11-07T17:00:27", "src": "ntp"}
+{"uid": "E1 EC F7 02", "name": "Zara", "roll": "CS-13", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25228.07, "ts": "2026-11-07T17:00:28", "src": "ntp"}
+{"uid": "2B 36 41 4C", "name": "Isha", "roll": "CS-15", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25228.72, "ts": "2026-11-07T17:00:28", "src": "ntp"}
+{"uid": "06 11 1C 27", "name": "Dev", "roll": "CS-14", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25229.32, "ts": "2026-11-07T17:00:29", "src": "ntp"}
+{"uid": "03 0E 19 24", "name": "Priya", "roll": "CS-07", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25234.1, "ts": "2026-11-07T17:00:34", "src": "ntp"}
+{"uid": "97 A2 AD B8", "name": "Ananya", "roll": "CS-11", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25236.31, "ts": "2026-11-07T17:00:36", "src": "ntp"}
+{"uid": "6F 7A 85 90", "name": "Sara", "roll": "CS-03", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25237.9, "ts": "2026-11-07T17:00:37", "src": "ntp"}
+{"uid": "25 30 3B 46", "name": "Aisha", "roll": "CS-01", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25243.9, "ts": "2026-11-07T17:00:43", "src": "ntp"}
+{"uid": "6F 7A 85 90", "name": "Sara", "roll": "CS-03", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25244.04, "ts": "2026-11-07T17:00:44", "src": "ntp"}
+{"uid": "DE E9 F4 FF", "name": "Vikram", "roll": "CS-06", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25244.34, "ts": "2026-11-07T17:00:44", "src": "ntp"}
+{"uid": "4D 58 63 6E", "name": "Meera", "roll": "CS-09", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25244.56, "ts": "2026-11-07T17:00:44", "src": "ntp"}
+{"uid": "97 A2 AD B8", "name": "Ananya", "roll": "CS-11", "result": "GRANTED", "attendance": "PRESENT", "suspect": false, "simulated": false, "t": 25244.79, "ts": "2026-11-07T17:00:44", "src": "ntp"}

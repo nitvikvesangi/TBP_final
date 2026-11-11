@@ -1,0 +1,6 @@
+session,when,score,band,kind,cards,students,reasons
+session_01,2026-11-07 10:00:05,30,WATCH,STACK-TAP,4,CS-04 CS-15 CS-14 CS-13,burst 4 cards in 2.3s | 100% of cards never seen before
+session_03,2026-11-07 12:00:41,63,REVIEW,STACK-TAP,5,CS-01 CS-03 CS-06 CS-09 CS-11,impossible-gap 100% of pairs under 0.5s | burst 5 cards in 1.0s
+session_05,2026-11-07 14:00:43,71,HIGH,STACK-TAP,5,CS-01 CS-03 CS-06 CS-09 CS-11,impossible-gap 100% of pairs under 0.5s | burst 5 cards in 1.0s | same-ordered-chain seen 1x before | crowd-anomaly z-score 0.49 vs this student's history
+session_06,2026-11-07 15:00:57,80,HIGH,PROBING,0,,5 unregistered cards rejected in 6s - credential probing
+session_08,2026-11-07 17:00:43,71,HIGH,STACK-TAP,5,CS-01 CS-03 CS-06 CS-09 CS-11,impossible-gap 100% of pairs under 0.5s | burst 5 cards in 0.9s | same-ordered-chain seen 2x before | crowd-anomaly z-score 0.43 vs this student's history

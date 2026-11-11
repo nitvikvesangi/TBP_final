@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RFID Smart Attendance &amp; Door Access — project video slides</title>
+<style>
+  :root{
+    --sheet:#f6f2e9; --ink:#1c1b19; --ink2:#42403a; --muted:#7b7469;
+    --line:#d8d0c1; --line2:#e7e0d3; --accent:#b23a1f; --green:#2f6f4f; --red:#a8321c;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,"DejaVu Sans Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--sheet);color:var(--ink);font-family:var(--serif);overflow:hidden}
+  .slide{
+    display:none; position:relative; height:100vh; padding:7vh 8vw 9vh;
+    flex-direction:column; justify-content:center; gap:2.2vh;
+  }
+  .slide.on{display:flex}
+  .kicker{font:600 1.05vw/1.4 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--accent)}
+  h1{font:400 4.6vw/1.08 var(--serif); margin:.4vh 0 0; letter-spacing:-.01em}
+  h2{font:400 3.1vw/1.15 var(--serif); margin:0; letter-spacing:-.01em}
+  h3{font:400 1.75vw/1.3 var(--serif); margin:0 0 .4vh}
+  p{font:400 1.5vw/1.62 var(--serif); margin:0; color:var(--ink2); max-width:62ch}
+  .lead{font-size:1.85vw; color:var(--ink)}
+  ul{margin:.4vh 0 0; padding-left:1.3em; max-width:60ch}
+  li{font:400 1.42vw/1.7 var(--serif); color:var(--ink2); margin:.35vh 0}
+  li strong{color:var(--ink)}
+  .rule{height:1px;background:var(--line);margin:1.6vh 0}
+  .meta{font:1.02vw/1.7 var(--mono); color:var(--muted)}
+  .mono{font-family:var(--mono)}
+  .accent{color:var(--accent)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:4vw;align-items:start}
+  table{width:100%;border-collapse:collapse;margin-top:1.2vh}
+  th,td{text-align:left;padding:.85vh .6vw;border-bottom:1px solid var(--line2);vertical-align:top}
+  th{font:600 .95vw/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+     border-bottom:1px solid var(--line)}
+  td{font:400 1.28vw/1.5 var(--serif);color:var(--ink2)}
+  td.n{font-family:var(--mono);font-size:1.15vw;color:var(--ink);white-space:nowrap}
+  tr.tot td{border-bottom:0;color:var(--ink);font-weight:600}
+  /* block diagram */
+  .diagram{display:flex;align-items:stretch;gap:.9vw;flex-wrap:nowrap;margin-top:1.4vh}
+  .box{border:1px solid var(--line);background:#fbf8f2;padding:1.1vh .9vw;flex:1 1 0;min-width:0}
+  .box .t{font:600 .82vw/1.4 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .box .v{font:400 1.18vw/1.4 var(--serif);color:var(--ink);margin-top:.5vh}
+  .box.hi{border-color:var(--accent)}
+  .box.hi .t{color:var(--accent)}
+  .arrow{align-self:center;color:var(--muted);font:1.6vw/1 var(--mono)}
+  .row2{display:flex;gap:.9vw;margin-top:.9vw;align-items:stretch}
+  .row2 .box{flex:1}
+  .pill{display:inline-block;border:1px solid var(--line);padding:.25vh .7vw;font:600 .92vw/1.6 var(--mono);
+        letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+  .pill.hi{border-color:var(--accent);color:var(--accent)}
+  .big{display:flex;gap:3.2vw;margin-top:1.6vh;flex-wrap:wrap}
+  .stat .n{font:400 3.4vw/1 var(--serif);color:var(--ink)}
+  .stat .l{font:.92vw/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.6vh}
+  .quote{border-left:2px solid var(--accent);padding:.6vh 0 .6vh 1.2vw;margin-top:1.2vh;
+         font:1.5vw/1.55 var(--serif);color:var(--ink)}
+  /* hud */
+  .hud{position:fixed;right:2.2vw;bottom:2.4vh;display:flex;gap:1.6vw;align-items:center;
+       font:500 .95vw/1 var(--mono);color:var(--muted);letter-spacing:.08em}
+  .hud .hint{opacity:.75}
+  .bar{position:fixed;left:0;top:0;height:2px;background:var(--accent);transition:width .18s ease}
+  /* ?clean=1 hides the nav overlay so a frame can be captured for video */
+  body.clean .hud, body.clean .bar{display:none}
+  @media print{
+    html,body{overflow:visible;background:#fff}
+    .slide{display:flex!important;page-break-after:always;height:100vh;break-after:page}
+    .hud,.bar{display:none}
+  }
+  @media (max-width:820px){
+    .kicker{font-size:11px} h1{font-size:34px} h2{font-size:26px} p{font-size:15px}
+    li{font-size:14px} td{font-size:13px} th{font-size:10px} .meta{font-size:11px}
+    .slide{padding:8vh 7vw}
+    .diagram,.two{grid-template-columns:1fr;flex-direction:column}
+    .stat .n{font-size:30px}
+  }
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+
+<!-- 1 · title -->
+<section class="slide on">
+  <div class="kicker">Theme Based Project · Batch No</div>
+  <h1>RFID-Based Smart Attendance<br>&amp; Door Access Control</h1>
+  <div class="rule"></div>
+  <p class="lead">One card tap opens the door and writes the attendance record —
+    and the system notices when one person taps several cards.</p>
+  <p class="meta">ESP32 · MFRC522 reader · SG90 servo · weighted risk scoring</p>
+</section>
+
+<!-- 2 · problem -->
+<section class="slide">
+  <div class="kicker">01 · Problem</div>
+  <h2>Manual attendance is slow, and cards alone cannot prove identity</h2>
+  <ul>
+    <li><strong>Roll-call costs 5–10 minutes</strong> of every class and invites transcription errors.</li>
+    <li>A card proves <strong>a card was scanned</strong>, not who was holding it.</li>
+    <li><strong>Proxy attendance:</strong> one student taps five friends' cards — five students marked present.</li>
+    <li>A normal card log records the cheat <em>perfectly</em> and never sees it.</li>
+  </ul>
+  <div class="quote">The unsolved part is not the door. It is the pattern of taps.</div>
+</section>
+
+<!-- 3 · objective -->
+<section class="slide">
+  <div class="kicker">02 · Objective</div>
+  <h2>Automate the record, control the door, and flag the pattern</h2>
+  <div class="two">
+    <div>
+      <h3>The system does</h3>
+      <ul>
+        <li>reads the card UID locally, in under a second</li>
+        <li>opens the latch only for a registered card</li>
+        <li>writes one time-stamped attendance entry per session</li>
+        <li>works with no internet, uploading records later</li>
+      </ul>
+    </div>
+    <div>
+      <h3>The system refuses to do</h3>
+      <ul>
+        <li>never marks anyone absent on its own</li>
+        <li>never locks out a registered student</li>
+        <li>never accuses — it flags a run for a human</li>
+        <li>never invents a timestamp it did not have</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · hardware -->
+<section class="slide">
+  <div class="kicker">03 · Components — hardware</div>
+  <h2>Five parts and a breadboard</h2>
+  <table>
+    <thead><tr><th>Part</th><th>Specification</th><th>Job</th></tr></thead>
+    <tbody>
+      <tr><td>ESP32 DevKit</td><td class="n">dual-core 240 MHz, 4 MB flash, 2.4 GHz Wi-Fi</td><td>decision, record, queue</td></tr>
+      <tr><td>MFRC522 reader</td><td class="n">13.56 MHz, ISO/IEC 14443A, SPI, 3.3 V only</td><td>reads the card UID</td></tr>
+      <tr><td>SG90 servo</td><td class="n">5 V, signal on GPIO 13</td><td>latch acknowledge</td></tr>
+      <tr><td>LEDs ×2</td><td class="n">green GPIO 26, red GPIO 27, 220–330 Ω</td><td>granted / denied feedback</td></tr>
+      <tr><td>Capacitor</td><td class="n">470 µF across 5 V</td><td>stops brown-out when the servo starts</td></tr>
+      <tr><td>Breadboard, jumpers, 2 cards</td><td class="n">under ₹1000 for the core parts</td><td>prototype</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 5 · software -->
+<section class="slide">
+  <div class="kicker">04 · Components — software</div>
+  <h2>No cloud, no database, no dependencies</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Built with</th><th>Responsibility</th></tr></thead>
+    <tbody>
+      <tr><td>Firmware</td><td class="n">Arduino C++, ESP32 core 3.3.12</td><td>reader, roster, servo, LEDs, flash queue</td></tr>
+      <tr><td>Storage on board</td><td class="n">LittleFS — /roster.txt</td><td>cards and unsent records survive power loss</td></tr>
+      <tr><td>Receiver</td><td class="n">Python 3, standard library only</td><td>token-authenticated upload endpoint</td></tr>
+      <tr><td>Analysis</td><td class="n">detect.py — weighted model</td><td>scores each run of taps 0–100</td></tr>
+      <tr><td>Dashboard</td><td class="n">one self-contained HTML file</td><td>live register, no refresh</td></tr>
+    </tbody>
+  </table>
+  <p class="meta">Roster lives in flash: a card can be registered over serial without re-flashing.</p>
+</section>
+
+<!-- 6 · block diagram -->
+<section class="slide">
+  <div class="kicker">05 · Architecture</div>
+  <h2>Card → decision → record → score</h2>
+  <div class="diagram">
+    <div class="box"><div class="t">Input</div><div class="v">RFID card<br><span class="meta mono">13.56 MHz UID</span></div></div>
+    <div class="arrow">→</div>
+    <div class="box"><div class="t">Reader</div><div class="v">MFRC522<br><span class="meta mono">SPI</span></div></div>
+    <div class="arrow">→</div>
+    <div class="box hi"><div class="t">Controller</div><div class="v">ESP32<br><span class="meta mono">roster · decision</span></div></div>
+    <div class="arrow">→</div>
+    <div class="box"><div class="t">Actuator</div><div class="v">servo + LEDs<br><span class="meta mono">nudge / pulse</span></div></div>
+  </div>
+  <div class="row2">
+    <div class="box"><div class="t">On board</div><div class="v">Attendance record + offline queue in LittleFS</div></div>
+    <div class="box"><div class="t">When Wi-Fi exists</div><div class="v">HTTP POST, token-authenticated, to the laptop receiver</div></div>
+    <div class="box hi"><div class="t">Laptop</div><div class="v">Scoring model → live dashboard</div></div>
+  </div>
+  <p class="meta">Pull the laptop away and the door still works; records upload by themselves later.</p>
+</section>
+
+<!-- 7 · one scan -->
+<section class="slide">
+  <div class="kicker">06 · Workflow</div>
+  <h2>What happens in the 300 ms after a tap</h2>
+  <table>
+    <thead><tr><th>#</th><th>Step</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td>Read UID over SPI</td><td class="n">4A 1F 9C 2E</td></tr>
+      <tr><td class="n">2</td><td>Lookup in roster (flash)</td><td class="n">found / not found</td></tr>
+      <tr><td class="n">3</td><td>Not found</td><td class="n">DENIED · red 0.5 s · door stays shut</td></tr>
+      <tr><td class="n">4</td><td>Found</td><td class="n">GRANTED · green 0.5 s · servo nudges</td></tr>
+      <tr><td class="n">5</td><td>Already present this session?</td><td class="n">ALREADY_MARKED — door opens, count unchanged</td></tr>
+      <tr><td class="n">6</td><td>Append record, queue for upload</td><td class="n">timestamp + source (ntp / uptime)</td></tr>
+      <tr><td class="n">7</td><td>3 distinct cards within 2 s?</td><td class="n">PROXY SUSPECT on the run</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8 · the premise -->
+<section class="slide">
+  <div class="kicker">07 · The detection idea</div>
+  <h2>A real queue and a stack of cards look different in time</h2>
+  <div class="two">
+    <div>
+      <h3>Real queue</h3>
+      <ul>
+        <li>one person every 2–3 s</li>
+        <li>card, step aside, next person</li>
+        <li>gaps are human walking speed</li>
+      </ul>
+      <div class="quote">Nothing to flag.</div>
+    </div>
+    <div>
+      <h3>Stack of cards</h3>
+      <ul>
+        <li>five taps in under 1.2 s</li>
+        <li>gaps of 0.2–0.3 s</li>
+        <li>a hand can move that fast; two people cannot pass one door that fast</li>
+      </ul>
+      <div class="quote">Flag the run, do not accuse the student.</div>
+    </div>
+  </div>
+  <p class="meta">The threshold: two different cards closer than 0.5 s at one door.</p>
+</section>
+
+<!-- 9 · the score -->
+<section class="slide">
+  <div class="kicker">08 · The score</div>
+  <h2>Seven signals, weighted, nothing hidden</h2>
+  <table>
+    <thead><tr><th>Signal</th><th>Measured on the run</th><th>Weight</th></tr></thead>
+    <tbody>
+      <tr><td class="n">impossible-gap</td><td>two different cards under 0.5 s apart</td><td class="n">0.40</td></tr>
+      <tr><td class="n">burst</td><td>many different cards inside a couple of seconds</td><td class="n">0.20</td></tr>
+      <tr><td class="n">crowd-anomaly</td><td>this mix of people is unusual for that student</td><td class="n">0.12</td></tr>
+      <tr><td class="n">tight-gaps</td><td>0.5–1.2 s: fast, but possible</td><td class="n">0.10</td></tr>
+      <tr><td class="n">order-rigidity</td><td>the same chain of cards keeps reappearing</td><td class="n">0.10</td></tr>
+      <tr><td class="n">new-cards</td><td>cards never seen in earlier sessions</td><td class="n">0.05</td></tr>
+      <tr><td class="n">nearby-denials</td><td>rejected cards tried in the same window</td><td class="n">0.03</td></tr>
+      <tr class="tot"><td class="n">worked example</td><td>five cards in 0.95 s, repeated order</td><td class="n">0.712 → 71 HIGH</td></tr>
+    </tbody>
+  </table>
+  <p class="meta">A habitual pair of students who always arrive together gets a small discount.</p>
+</section>
+
+<!-- 10 · bands -->
+<section class="slide">
+  <div class="kicker">09 · Output</div>
+  <h2>Four bands — the score is a request for review, not a verdict</h2>
+  <table>
+    <thead><tr><th>Band</th><th>Score</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="n">CLEAR</td><td class="n">0–29</td><td>nothing unusual in the data</td></tr>
+      <tr><td class="n">WATCH</td><td class="n">30–49</td><td>fast, explainable by a busy door</td></tr>
+      <tr><td class="n">REVIEW</td><td class="n">50–69</td><td>a human should read the timestamps</td></tr>
+      <tr><td class="n">HIGH</td><td class="n">70+</td><td>treat as proxy until proven otherwise</td></tr>
+    </tbody>
+  </table>
+  <div class="quote">Flags. Never marks absent, never locks out, never edits a record.</div>
+</section>
+
+<!-- 11 · results -->
+<section class="slide">
+  <div class="kicker">10 · Results</div>
+  <h2>What the prototype actually showed</h2>
+  <div class="big">
+    <div class="stat"><div class="n">4/4</div><div class="l">attacks caught</div></div>
+    <div class="stat"><div class="n">0/4</div><div class="l">false alarms</div></div>
+    <div class="stat"><div class="n">63 → 71 → 80</div><div class="l">cheat, repeat, probing</div></div>
+    <div class="stat"><div class="n">58</div><div class="l">real bench run · REVIEW</div></div>
+  </div>
+  <div class="rule"></div>
+  <ul>
+    <li>Card → green LED + servo nudge → attendance row, under a second, on real hardware.</li>
+    <li>Unregistered card → <strong>DENIED</strong>, red LED, latch never moves.</li>
+    <li>Same card twice → <strong>ALREADY_MARKED</strong>, door opens, count unchanged.</li>
+    <li>Five cards in 1.20 s on the bench → <strong>REVIEW 58/100</strong>, arithmetic on screen.</li>
+    <li>Repeated chain scores higher; a group who always walk in together stays silent.</li>
+  </ul>
+</section>
+
+<!-- 12 · limits -->
+<section class="slide">
+  <div class="kicker">11 · Honest limits and future scope</div>
+  <h2>What this cannot do yet</h2>
+  <div class="two">
+    <div>
+      <h3>Limits, stated plainly</h3>
+      <ul>
+        <li>a <strong>cloned card</strong> carries the same UID — invisible at UID level</li>
+        <li>one door cannot prove travel time; a patient cheat lands in WATCH</li>
+        <li>the 8-session evaluation set is <strong>synthetic and labelled</strong></li>
+        <li>physical evidence is two cards over two days</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Next</h3>
+      <ul>
+        <li>a second reader at a second door → impossible travel becomes provable</li>
+        <li>DESFire / challenge-response → cloning stops working</li>
+        <li>a term of real sessions to re-run the evaluation</li>
+        <li>signed records so the log cannot be edited afterwards</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · close -->
+<section class="slide">
+  <div class="kicker">Theme Based Project · Batch No</div>
+  <h1>Thank you</h1>
+  <p class="lead">One tap, two decisions: may this card enter, and is this attendance real?</p>
+  <p class="meta">Questions welcome — the write-up, wiring, scoring arithmetic and measured numbers are all in the report.</p>
+</section>
+
+<div class="hud"><span id="num">01 / 13</span><span class="hint">→ next · ← back · f fullscreen · p print</span></div>
+
+<script>
+  if (location.search.includes('clean')) document.body.classList.add('clean');
+
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let i = 0;
+  const num = document.getElementById('num');
+  const bar = document.getElementById('bar');
+  const pad = n => String(n).padStart(2, '0');
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    num.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+
+  addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter') { e.preventDefault(); show(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); show(i - 1); }
+    else if (k === 'Home') { show(0); }
+    else if (k === 'End') { show(slides.length - 1); }
+    else if (k === 'f' || k === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen?.();
+    }
+    else if (k === 'p' || k === 'P') { print(); }
+  });
+
+  // click right half = next, left half = previous
+  addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    show(e.clientX < innerWidth * 0.25 ? i - 1 : i + 1);
+  });
+
+  const start = parseInt(location.hash.replace('#', ''), 10);
+  show(Number.isFinite(start) && start > 0 ? start - 1 : 0);
+</script>
+</body>
+</html>

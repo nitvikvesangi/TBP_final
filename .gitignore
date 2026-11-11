@@ -1,0 +1,17 @@
+# Wi-Fi / server credentials for the sketch - never commit these
+secrets.h
+
+# Arduino build output
+build/
+*.map
+.arduino15/
+.tools/
+
+# Host scratch
+*.log
+
+# macOS
+.DS_Store
+
+# Arduino IDE user libraries (build-time copies, not project source)
+.user/

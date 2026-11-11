@@ -1,0 +1,37 @@
+# video/explainer.mp4 - narration, 11 slides, voice Aman @ 160 wpm
+# edit the text in build_video.py, then re-run it
+
+[00:00.0]  slide 01
+This is our RFID attendance and door project. One tap should open the door and mark you present and the system should notice when someone taps cards for their friends.
+
+[00:10.2]  slide 02
+Right now, attendance means calling out names, which eats into class time. A card reader fixes the paperwork, but not the cheating. A card only proves that a card was scanned. Nothing stops one person carrying five friends' cards and tapping them one by one.
+
+[00:27.0]  slide 04
+The build is simple. The ESP32 does the thinking. The MFRC522 reader reads the card and it needs three point three volts, because five volts destroys it. A small servo works the door latch, and two LEDs just say yes or no.
+
+[00:44.3]  slide 05
+The board runs one Arduino program, and it keeps the list of allowed cards in its own memory. So it still works with no laptop and no internet. The laptop only records the scans, and scores them.
+
+[00:57.0]  slide 06
+Here's the flow. The card gets read, the ESP32 checks the list, and decides on the spot: green light and a latch nudge, or red light and nothing. That decision never leaves the board. The scan also becomes a time stamped record, and when Wi-Fi is there it goes to the laptop. If it isn't, the record waits in memory and uploads later.
+
+[01:18.5]  slide 07
+So one tap, four steps. Read the card. Is it on the list? No, red light, the door stays shut, and the attempt is still logged. Yes, green light, the latch moves, and you're marked present. Tap the same card again and the door still opens, but you're not counted twice.
+
+[01:35.8]  slide 08
+Now the clever part. Picture a real queue. One person every two or three seconds, because that's how fast you can walk through a door. Now picture a hand fanning five cards. About a fifth of a second between each one. A hand can move that fast. Two people cannot. That timing difference is the whole idea.
+
+[01:55.0]  slide 09
+So the system times the taps, and gives each suspicious run a score out of a hundred. Cards too close together, too many too quickly, an unusual group of people, the same sequence coming back all push the score up. And then it just flags it. A human decides.
+
+[02:12.1]  slide 11
+On real hardware it works. A tap opens the door, and the dashboard updates itself in about two seconds, no refresh. On eight test sessions it caught all four fake runs, and raised no false alarms. And the second time someone repeats a cheat, it scores higher.
+
+[02:28.3]  slide 12
+Two honest limits. A cloned card carries the same ID, so you'd need stronger cards to stop that. And one door can't prove travel time, so a slow, patient cheat looks normal. A second reader at a second door would fix it.
+
+[02:43.1]  slide 13
+That's the project. One tap, two decisions can this card come in, and is this attendance real? Thank you.
+
+# total 170.6s
